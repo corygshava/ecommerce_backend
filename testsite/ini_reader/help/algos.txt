@@ -1,0 +1,2 @@
+so the idea is that its an html page with a form with a file input and a button. 
+its in a centered div and below it is a div that when the form is submitted will read the file find out if its a text or ini file and display the contents on the lower div

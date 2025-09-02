@@ -1,0 +1,8 @@
+test the admins.class
+work on login,
+
+	fix the ai slop of a checksession logic
+	implement the full sessionsetup system
+	implement logout
+figure out how to make apis for getting and setting certain tasks
+make the admins module have full CRUD -> just CRU for obvious reasons

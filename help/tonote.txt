@@ -1,0 +1,4 @@
+logs subsys
+	add a logs system for class level logs (for logging even when the db is unavailable)
+	make it save both as JSON and plaintext
+	make it be encrypted

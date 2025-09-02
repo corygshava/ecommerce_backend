@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ini Manager + Translator</title>
+
+	<link rel="stylesheet" href="../res/_sharedassets/css/theme.css">
+	<link rel="stylesheet" href="../res/_sharedassets/css/mediaoptima.css">
+	<link rel="stylesheet" href="../res/_sharedassets/css/fonts.css">
+	<link rel="stylesheet" href="../res/_sharedassets/css/w3.css">
+	<link rel="stylesheet" href="../res/_sharedassets/css/fa-all.css">
+	<link rel="stylesheet" href="../res/_sharedassets/css/coryG_UIOps.css">
+	<link rel="stylesheet" href="../res/_sharedassets/css/animate.css">
+</head>
+<body>
+	<div class="content">
+		<header class="w3-center w3-animate-opacity">
+			<h1>Ini Helper</h1>
+		</header>
+
+		<!-- Language selector -->
+		<div class="card flow gapy formguy w3-center slide-top" data-role="fileform">
+			<label>Pick an option to continue</label>
+			<input type="file" name="thefile" id="inifile" class="w3-hide">
+			<div class="btngroup w3-center w3-block centroid">
+				<button class="btn primary" onclick="getfile()">Load ini</button>
+				<button class="btn outline" onclick="meknew()">create new ini</button>
+				<button class="btn primary w3-hide" onclick="getfile()">Load adjacent .ini</button>
+				<!-- <button class="btn outline" data-toggler="#transModal" data-onshow="flex">Translate word</button> -->
+			</div>
+		</div>
+
+		<div class="card w3-center w3-hide slide-top" data-role="summary">
+			<i>summary</i><br>
+			<span class="summ_display">this file has <b>32</b> entries, <b>3</b> sections and <b>40</b> lines</span>
+		</div>
+
+		<!-- Ini list -->
+		<ul id="iniList"></ul>
+
+		<div class="mainsect" data-role="iniops" style="display:none;">
+			<div class="naver w3-center" data-role="optionsdisplay">
+				<h4>options</h4>
+				<button class="btn outline" data-role="mainpanelsbtns">list</button>
+				<button class="btn outline" data-role="mainpanelsbtns">raw data</button>
+				<button class="btn outline" data-role="mainpanelsbtns">export</button>
+			</div>
+
+			<div class="stack slide-top" data-tabgroup="mainpanels" style="display:none;">
+				<div class="card w3-hide">
+					<div class="stats" data-role="filestats">
+						<div class="standin"><i>file stats show here</i></div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="flowline searchbox" data-role="searchbox">
+						<select id="searchtype">
+							<option value="key" selected>key containing : </option>
+							<option value="value">value containing : </option>
+							<option value="section">section containing: </option>
+						</select>
+						<input id="searcher" type="search" placeholder="search the list of items" width="100%">
+
+						<datalist >
+							<option value="npt_"></option>
+						</datalist>
+					</div>
+					<div class="standin">
+						<i class="search_errbox">--</i>
+					</div>
+				</div>
+
+				<div class="card">
+					<button class="w3-right btn outline" data-toggler="#addmodal" data-onshow="flex" onclick="resetaddinput()"><i class="fa fa-plus"></i></button>
+					<h2>Entries</h2>
+					<div class="parsedstuff stack gapy listguy">
+						<div class="standin">
+							<i>items appear here</i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="stack slide-top" data-tabgroup="mainpanels" style="display:none;">
+				<div class="card extraspanel" data-shown="0">
+					<!-- <button class="w3-right btn outline w3-text-white" onclick="showrdata(false)" data-role="togglerdataoff">hide raw data</button> -->
+					<button class="w3-right btn primary" onclick="renderlist();showpanel(0)">update</button>
+					<h2>Raw data</h2>
+					<textarea id="filecontents">---</textarea>
+				</div>
+			</div>
+
+			<div class="stack slide-top" data-tabgroup="mainpanels" style="display:none;">
+				<div class="card extraspanel" data-shown="0">
+					<!-- <button class="w3-right btn outline w3-text-white" onclick="showrdata(false)" data-role="togglerdataoff">hide raw data</button> -->
+					<h2 class="w3-center">Export options</h2>
+					<!-- <textarea id="filecontents">---</textarea> -->
+					<div class="centroid gap-sm">
+						<button class="btn outline" onclick="showpanel(1)">review output</button>
+						<button class="btn outline" onclick="copy_ini()">copy to clipboard</button>
+						<button class="btn primary" onclick="export_ini()">Export as .ini</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Translator modal -->
+		<div class="modal w3-animate-opacity" id="transModal" data-shown="0">
+			<div class="modal-content tilt-in-right-1">
+				<h3>Translate word</h3>
+				<label>Word</label>
+				<input id="wordToTranslate" type="text" placeholder="type here"/>
+				<label>To language</label>
+				<select id="transLang">
+					<option value="EN">English</option>
+					<option value="SW">Swahili</option>
+					<option value="PL">Polish</option>
+					<option value="DE">German</option>
+				</select>
+				<div style="margin-top:15px">
+					<button class="btn primary" onclick="translate()">Translate</button>
+					<button class="btn outline" data-toggler="#transModal">Close</button>
+				</div>
+				<p id="transResult" style="margin-top:10px;font-weight:600"></p>
+			</div>
+		</div>
+
+		<div class="modal w3-animate-opacity" id="addmodal" data-shown="0">
+			<div class="modal-content tilt-in-right-1">
+				<button class="w3-right btn outline" data-toggler="#addmodal"><i class="fa fa-times"></i></button>
+				<h2>Add new .ini entry</h2>
+				<!-- Add / Edit form -->
+				<div class="formguy w3-hided" data-role="addentryform">
+					<label>Field</label>
+					<input id="_idInput" type="hidden" placeholder="Key" value="-1"/>
+					<input id="_fieldInput" type="text" placeholder="Key"/>
+					<label>Value</label>
+					<input id="_valueInput" type="text" placeholder="Value"/>
+					<div style="margin-top:15px">
+						<button class="btn primary" onclick="saveEntry()">save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../res/_sharedassets/js/SuperScript.js"></script>
+	<script src="../res/_sharedassets/js/toappend.js"></script>
+	<script src="../res/_sharedassets/js/customalerter.js"></script>
+	<script src="../res/_sharedassets/js/coryG_UIOps.js"></script>
+	<script src="assets/iniops.js"></script>
+	<script>
+		// runtime variables
+		let default_start_line = ";ini file starts here\n";
+		let isdirty = false;
+		let cur_filename = "new.ini";
+		let cur_filetype = "application/octet-stream";
+		let latestdata = undefined;
+		let issaved = false;
+
+		let theform = document.querySelector('[data-role="fileform"]');
+		let fileinput = theform.querySelector('#inifile');
+		let outbox = document.querySelector("#filecontents");
+		let holder = document.querySelector(".listguy");
+
+		let searchguy = document.querySelector('[data-role="searchbox"]');
+		let npt_stype = searchguy.querySelector('select');
+		let npt_stxt = searchguy.querySelector('input');
+		let search_errbox = document.querySelector('.search_errbox');
+
+		let ui_fileops = document.querySelector('[data-role="iniops"]');
+		let ui_tabswtchers = document.querySelectorAll(`[data-role="optionsdisplay"]>.btn`);
+
+		let ui_addform = document.querySelector('[data-role="addentryform"]');
+		let npt_add_key = ui_addform.querySelector('#_fieldInput');
+		let npt_add_value = ui_addform.querySelector('#_valueInput');
+		let npt_edit_id = ui_addform.querySelector('#_idInput');
+
+		let ui_summary = document.querySelector('[data-role="summary"]');
+		let ui_summtxt = ui_summary.querySelector('.summ_display');
+
+		function confirm_discard(prp){
+			prp = prp == undefined ? "you have already started working with an ini, do you want to discard it?" : prp;
+			let cn = true;
+
+			if(isdirty){
+				cn = confirm(prp)
+			} else {
+				isdirty = true;
+			}
+
+			return cn;
+		}
+
+		function getfile() {
+			let con = confirm_discard();
+
+			if(con){
+				fileinput.click();
+			} else {
+				alert_dark("work preserved");
+			}
+		}
+
+		function meknew() {
+			let con = confirm_discard();
+
+			if(con){
+				showfileops(true);
+				showinfo(default_start_line);
+			} else {
+				alert_dark("work preserved");
+			}
+		}
+
+		fileinput.addEventListener('input',() => {
+			readfile();
+		})
+
+		function readfile() {
+			if(!fileinput.files || fileinput.files.length === 0){
+				alert_danger("choose a file first");
+				return;
+			}
+
+			let file = fileinput.files[0];
+			let validTypes = ["text/plain", "application/octet-stream"];
+			let ext = file.name.split(".").pop().toLowerCase();
+
+
+			if(validTypes.includes(file.type) || ext =="ini" || ext == "txt"){
+
+				alert_success("valid file");
+
+				cur_filename = file.name;
+				cur_filetype = file.type;
+				// read the file
+				const reader = new FileReader();
+
+				reader.onload = function(e) {
+					let text = e.target.result;
+					alert_success("file read");
+
+					showfileops(true);
+					showinfo(text);
+				}
+
+				reader.readAsText(file);
+			} else {
+				alert_danger("invalid file type")
+			}
+		}
+
+		function showfileops(con) {
+			// shows the iniops section
+			if(con){
+				ui_fileops.style.display = "flex";
+				ui_summary.classList.remove("w3-hide");
+
+				showpanel(0);
+			}
+		}
+
+		function showpanel(n) {
+			tabSwitchB(Number(n),`[data-tabgroup="mainpanels"]`,"none","flex",`[data-role="optionsdisplay"]>.btn`,"primary","outline");
+		}
+
+		function showstats(d) {
+			ui_summary.animate([{opacity:0},{opacity:1}],{duration:700});
+
+			let payload = JSON.stringify(d);
+
+			// console.log(d);
+			ui_summtxt.innerHTML = `this file has 
+					<b>${d.items.length}</b> ${plural("entry",d.items.length)}, 
+					<b>${d.sections.length}</b> ${plural("section",d.sections.length)}, 
+					<b>${d.lines.length}</b> ${plural("line",d.lines.length)} and 
+					<b>${d.comments.length}</b> ${plural("comment",d.comments.length)}
+			`;
+		}
+
+		function showinfo(what,scr) {
+			what = what == undefined ? "nothing to show" : what;
+			outbox.value = what;
+
+			renderlist(scr);
+			// alert_success("should have shown");
+		}
+
+		// for rendering and reverse rendering the .ini entries
+		function renderlist(scrcon) {
+			let data = parseini(outbox.value);
+			let sections = data.sections;
+			let items = data.items;
+			let finht = document.createElement('div');
+
+			latestdata = data;
+
+			holder.innerHTML = `<div class="list-item panelbg2">
+					<div><b>property</b></div>
+					<div><b class="w3-text-blue spacy">value</b></div>
+				</div>`;
+
+			items.forEach((el,id) => {
+				let div = document.createElement('div');
+
+				let outht = `
+					<div>${id+1} <b>${el.key}</b></div>
+					<div><b class="w3-text-blue spacy">${el.value}</b></div>
+					<div class="myactions">
+						<button class="btn w3-hide"><i class="fa fa-pencil-alt"></i></button>
+					</div>
+				`;
+
+				let lineid = el.lineid;
+
+				div.className = "list-item";
+				div.dataset.item = true;
+				div.dataset.mysection = `${el.section}`;
+				div.dataset.mykey = `${el.key}`;
+				div.dataset.myvalue = `${el.value}`;
+				div.dataset.lineid = lineid;
+				div.innerHTML = outht;
+
+				let btn = document.createElement('button');
+				btn.className = "btn";
+				btn.innerHTML = `<i class="fa fa-pencil-alt"></i>`;
+				btn.addEventListener('click',(e) => {
+					editline(id,lineid);
+				})
+
+				div.querySelector('.myactions').appendChild(btn);
+
+				btn = document.createElement('button');
+				btn.className = "btn";
+				btn.innerHTML = `<i class="fa fa-times"></i>`;
+				btn.addEventListener('click',(e) => {
+					delete_entry(lineid);
+				})
+
+				div.querySelector('.myactions').appendChild(btn);
+
+				holder.appendChild(div);
+			})
+
+			// holder.appendChild(finht);
+
+			alert_success("item list updated");
+			showstats(data);
+
+			if(scrcon == true || scrcon == undefined)
+				scrollToElement('[data-role="summary"]');
+		}
+
+		function rerenderini(refresh) {
+			let lines = latestdata.lines;
+			let rawdata = lines.join("\n");
+
+			outbox.value = rawdata;
+
+			if(refresh == true && refresh != undefined){
+				renderlist();
+			}
+		}
+
+		// -----------------------------------------------------
+
+		function searchitems() {
+			let stype = npt_stype.value;
+			let stxt = npt_stxt.value.toLowerCase();
+
+			let items = holder.querySelectorAll('[data-item]');
+			let found = 0;
+
+			items.forEach(el => {
+				let map = `my${stype.toLowerCase()}`;
+				let dis = "none";
+				let inter = el.dataset[map] == undefined ? "" : el.dataset[map].toLowerCase();
+
+				if(inter.includes(stxt)){
+					found += 1;
+					dis = "flex";
+				}
+
+				// console.log(`comparing ${inter} vs ${stxt}`)
+
+				el.style.display = dis;
+			})
+
+			if(found == 0){
+				items.forEach(el => {
+					el.style.display = "flex";
+				});
+
+				search_errbox.innerHTML = "no results";
+			} else {
+				search_errbox.innerHTML = `found <b>${found}</b> ${plural("entry",found)}`;
+			}
+
+			search_errbox.animate([
+				{opacity:0,translate: '0 20px'},
+				{opacity:1,translate: '0 0'}
+			],{duration: 700})
+		}
+
+		function showrdata(con){
+			toggleShow('.extraspanel');
+			toggleShow('[data-role="togglerdataon"]');
+		}
+
+		// entry based CRUD
+		function saveEntry() {
+			let key = npt_add_key.value;
+			let value = npt_add_value.value;
+			let lineid = Number(npt_edit_id.value);
+
+			let line = `${key} = ${value}`;
+
+			if(lineid == -1){
+				outbox.value += `\n${line}`;
+				alert_success('new line added');
+			} else {
+				// alert_dark("trying to edit");
+				latestdata.lines[Number(lineid)] = line;
+				alert_dark(`editting line ${lineid}`);
+				// return;
+				rerenderini();
+
+				alert_success("entry edited");
+			}
+
+			renderlist(false);
+
+			toggleShow("#addmodal");
+		}
+
+		function resetaddinput() {
+			npt_edit_id.value = -1;
+		}
+
+		function editline(n,lineid) {
+			let item = undefined,line = undefined;
+			let items = latestdata.items;
+			let dalines = latestdata.lines;
+
+			item = items[n];
+			line = dalines[lineid];
+
+			console.log(n,item,line);
+			alert_dark('gotten dataa');
+
+			npt_add_key.value = item.key;
+			npt_add_value.value = item.value;
+			npt_edit_id.value = lineid;
+
+			toggleShowB("#addmodal","flex","none");
+		}
+
+		function delete_entry(n) {
+			let con = confirm("are you sure you want to delete this entry");
+
+			if(con){
+				alert_dark(`deleting line number ${n}`);
+
+				let newlines = [...latestdata.lines].filter((e,id) => {return !(id == Number(n))}).join("\n");
+
+				outbox.value = newlines;
+				showinfo(newlines,false);
+			} else {
+				alert_success("work preserved");
+			}
+		}
+
+		// export options
+		function copy_ini() {
+			issaved = true;
+
+			let thetxt = outbox.value;
+
+			copytext1(thetxt);
+			alert_success('text copied successfully');
+		}
+
+		function export_ini() {
+			issaved = true;
+
+			alert_dark('starting export');
+
+			let thetxt = outbox.value;
+
+			try{
+				let tempfile = new Blob([thetxt],{type:cur_filetype});
+				let url = URL.createObjectURL(tempfile);
+				let thelink = document.createElement('a');
+
+				thelink.download = cur_filename;
+				thelink.href = url;
+				thelink.innerHTML = "download ini";
+				thelink.click();
+			} catch(err){
+				alert_danger(err);
+				return;
+			}
+
+			alert_success("file exported successfully");
+		}
+
+		// initialisers
+		function setupevents() {
+			npt_stxt.addEventListener('input',(e) => {
+				searchitems();
+			})
+
+			npt_stype.addEventListener('input',(e) => {
+				searchitems();
+			})
+
+			ui_tabswtchers.forEach((el,id) => {
+				el.addEventListener('click',e => {
+					showpanel(id);
+				})
+			})
+		}
+
+		window.addEventListener('load',el => {
+			setupevents();
+		})
+
+		window.addEventListener('beforeunload',el => {
+			if(isdirty && !issaved){
+				const msg = "Leaving this page or reloading will cause you to lose your work, are you sure?";
+				event.preventDefault();
+				event.returnValue = msg;
+				return msg;
+			}
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+[
+    {
+        "projectname" : "Module tester",
+        "projectlink" : "./module_tester",
+        "projectdesc" : "<p>An area for testing whether or not a class or controller exists and behaves as intended when read.</p><p>it is still a work in progress and only works in a local environment ie. <b>xampp</b></p>"
+    },
+    {
+        "projectname" : "Ini editor",
+        "projectlink" : "./ini_reader",
+        "projectdesc" : "<p>An area for modifying, creating and inspecting ini config files</p>"
+    }
+]

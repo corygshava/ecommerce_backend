@@ -1,0 +1,113 @@
+<?php
+/**
+ * create_file_if_missing
+ *
+ * Creates the file at $path if it doesn't exist. Very paranoid checks + race-safe creation.
+ * Returns true on success (file exists and is writable), false on error.
+ * Optional: pass &$error to get a diagnostic string on failure.
+ *
+ * @param string $path
+ * @param string|null &$error
+ * @return bool
+ */
+function create_file_if_missing(string $path, ?string &$error = null): bool
+    {
+        $error = null;
+        if ($path === ''){
+            $error = 'Empty path';
+            return false;
+        }
+
+        if (strpos($path, "\0") !== false) {
+            $error = 'Path contains null byte';
+            return false;
+        }
+
+        $lastErr = null;
+
+        set_error_handler(function($errno, $errstr) use (&$lastErr) {
+            $lastErr = $errstr;
+            return true; // prevent PHP internal handler from running
+        });
+
+        try {
+            // Resolve parent dir
+            $dir = dirname($path);
+            if ($dir === '' || $dir === '.') {
+                $dir = getcwd();
+                if ($dir === false){
+                    $error = 'Cannot resolve current working directory';
+                    return false;
+                }
+            }
+
+            clearstatcache(true, $path);
+
+            // If file already exists — ensure it's a regular file and writable
+            if (file_exists($path)) {
+                if (is_dir($path)) { $error = 'Target exists and is a directory'; return false; }
+                if (is_link($path)) { $error = 'Target is a symlink'; return false; }
+                if (!is_writable($path)) {
+                    @chmod($path, 0644);
+                    clearstatcache(true, $path);
+                    if (!is_writable($path)){
+                        $error = 'File exists but is not writable';
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            // Create parent directories if missing
+            if (!is_dir($dir)) {
+                $oldUmask = umask(0);
+                $mk = mkdir($dir, 0755, true);
+                umask($oldUmask);
+                if ($mk === false && !is_dir($dir)) {
+                    $err = $lastErr ?? "mkdir() failed";
+                    $error = "Failed to create directory '{$dir}': {$err}";
+                    return false;
+                }
+            }
+
+            // Ensure parent dir is writable
+            if (!is_writable($dir)) {
+                @chmod($dir, 0755);
+                clearstatcache(true, $dir);
+                if (!is_writable($dir)) { $error = "Directory '{$dir}' is not writable"; return false; }
+            }
+
+            // Basic filename sanity
+            $base = basename($path);
+            if ($base === '' || strlen($base) > 255) {
+                $error = 'Invalid filename';
+                return false;
+            }
+
+            // Atomic creation: fopen mode 'x' fails if file exists (race-safe)
+            $handle = @fopen($path, 'x');
+            if ($handle === false) {
+                // Maybe another process created it in the tiny window between checks
+                if (file_exists($path) && is_file($path) && is_writable($path)) {
+                    return true;
+                }
+                $err = $lastErr ?? 'Unable to open file for exclusive creation';
+                $error = "Failed to create file '{$path}': {$err}";
+                return false;
+            }
+
+            // Close handle, set safe perms, final sanity checks
+            fclose($handle);
+            @chmod($path, 0644);
+            clearstatcache(true, $path);
+
+            if (!is_file($path) || !is_writable($path)) {
+                $error = 'Created file is not a regular writable file';
+                return false;
+            }
+
+            return true;
+        } finally {
+            restore_error_handler();
+        }
+    }

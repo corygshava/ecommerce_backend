@@ -1,0 +1,3 @@
+<?php
+	say(">> packages loaded");
+?>

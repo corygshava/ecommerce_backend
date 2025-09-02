@@ -1,0 +1,9 @@
+make me a login page with a modern app design. make it that the form is on a centered div and takes in a username and password plus has a checkbox for remember me and a button for logging in. user fontawesome 5 for icons and use poppins font via google fonts. consider that its for a saas that allows clients to manage an Ecommerce backend. give it a light mode feel with a subtle golden gradient at the topleft
+
+make me a sindle page html page design for an admin dashboard for a luxury ecommerce brand. make it have a sidebar with relevant options and a navbar tthat points to the current location on the left and user options on the right (edit details, logout) available via a click that reveals a dropdown with those options.then make me a dashboard interface. make it show the latest information on earnings, orders and number of products available.
+
+make me a form for adding items into a db. make it have an input for 'name', number input for 'num',select for choosing (new item or old item) 'item status', a textarea for 'desc' followed with cheked input 'add logs'
+
+make me a form that can allow me to upload multiple images at a go. make it that i can upload a file then by clicking a button , it will create another opening make it to have controls to remove the images that have been chosen
+
+heres an .htaccess file {jrm_htaccess} take this .htaccess and modify it to make it that any request sent to and only sent to _dataops.php is mapped into a get variable called rt while still preserving any get parameters passed via the request. also add a rule that maps any request to this directory as long as its pointing to a non existent file it falls back to a .php file e.g /about goes to about.php

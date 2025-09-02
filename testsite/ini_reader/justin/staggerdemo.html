@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+/*
+* Simple stagger-animation helper
+* Usage: 
+*   Stagger.animate('.item');                          // once
+*   Stagger.animate('.card', {duration:600, delay:80}); // custom timing
+*   Stagger.animate('#menu li', {infinite:true});      // looping
+*/
+const Stagger = (() => {
+	const defaultKeyframes = [
+		{ opacity: 0, transform: 'translateY(20px)' },
+		{ opacity: 1, transform: 'translateY(0)' }
+	];
+
+	const defaultOptions = {
+		duration : 500,      // ms per element
+		delay    : 100,      // ms between each element
+		keyframes: defaultKeyframes,
+		infinite : false     // set true for looping
+	};
+
+	function animate(selector, opts = {}) {
+		const options = { ...defaultOptions, ...opts };
+		const els     = typeof selector === 'string'
+									? document.querySelectorAll(selector)
+									: selector;
+
+		els.forEach((el, idx) => {
+			const anim = el.animate(options.keyframes, {
+				duration : options.duration,
+				delay    : idx * options.delay,
+				fill     : 'both',
+				easing   : 'ease-out',
+				iterations: options.infinite ? Infinity : 1
+			});
+			// store handle so caller can .cancel() if needed
+			el._staggerAnim = anim;
+		});
+		return els; // allow chaining
+	}
+
+	return { animate };
+})();
+</script>
+
+<!-- ======= DEMO (remove for your own page) ======= -->
+<style>
+	.demo-item {
+		width: 120px;
+		height: 40px;
+		margin: 10px;
+		background: #4CAF50;
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 4px;
+		font-family: sans-serif;
+	}
+</style>
+
+<button onclick="Stagger.animate('.demo-item')">Run</button>
+<button onclick="Stagger.animate('.demo-item', {duration:800, delay:150})">Slower</button>
+<button onclick="Stagger.animate('.demo-item', {infinite:true})">Loop</button>
+
+<div class="demo-item">1</div>
+<div class="demo-item">2</div>
+<div class="demo-item">3</div>
+<div class="demo-item">4</div>
+</body>
+</html>

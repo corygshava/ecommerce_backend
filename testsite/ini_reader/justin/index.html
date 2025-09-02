@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search & Items List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .search-button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 12px 30px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #45a049;
+        }
+
+        .items-list {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .item-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Product Catalog</h1>
+        
+        <form class="search-form" onsubmit="searchItems(event)">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput" 
+                placeholder="Search items..." 
+                onkeyup="searchItems(event)"
+            >
+            <button type="submit" class="search-button">Search</button>
+        </form>
+
+        <div class="items-list" id="itemsList">
+            <!-- Items will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample items data
+        const items = [
+            {
+                title: "Wireless Bluetooth Headphones",
+                description: "High-quality audio with noise cancellation technology and 30-hour battery life"
+            },
+            {
+                title: "Smartphone Stand",
+                description: "Adjustable aluminum phone holder compatible with all smartphones and tablets"
+            },
+            {
+                title: "USB-C Charging Cable",
+                description: "Fast charging cable with braided design and 2-meter length"
+            },
+            {
+                title: "Wireless Mouse",
+                description: "Ergonomic design with silent clicks and long battery life"
+            },
+            {
+                title: "Laptop Cooling Pad",
+                description: "Dual fan cooling system with adjustable height settings"
+            },
+            {
+                title: "Portable Power Bank",
+                description: "20,000mAh capacity with fast charging for multiple devices"
+            },
+            {
+                title: "Webcam with Microphone",
+                description: "1080p HD quality for video calls and streaming"
+            },
+            {
+                title: "Wireless Keyboard",
+                description: "Compact design with backlight keys and multi-device connectivity"
+            }
+        ];
+
+        // Function to display items
+        function displayItems(itemsToShow) {
+            const itemsList = document.getElementById('itemsList');
+            
+            if (itemsToShow.length === 0) {
+                itemsList.innerHTML = '<div class="no-results">No items found</div>';
+                return;
+            }
+
+            itemsList.innerHTML = itemsToShow.map(item => `
+                <div class="item">
+                    <div class="item-title">${item.title}</div>
+                    <div class="item-description">${item.description}</div>
+                </div>
+            `).join('');
+        }
+
+        // Function to search items
+        function searchItems(event) {
+            if (event) event.preventDefault();
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchTerm) {
+                displayItems(items);
+                return;
+            }
+
+            const filteredItems = items.filter(item => 
+                item.title.toLowerCase().includes(searchTerm) || 
+                item.description.toLowerCase().includes(searchTerm)
+            );
+
+            displayItems(filteredItems);
+        }
+
+        // Highlight search term in text
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // Initialize the page
+        displayItems(items);
+    </script>
+</body>
+</html>

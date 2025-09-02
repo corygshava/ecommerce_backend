@@ -1,0 +1,18 @@
+[done]--------------------------------------
+
+[ongoing]-----------------------------------
+
+[undone]------------------------------------
+uis to generate
+	login
+	dashboard design
+	add product form
+	upload multiple images form
+tables to generate
+	admins
+	products
+	orders
+	uploads
+architecture
+	figure out project structure
+	work with my fast and dirty approach and switch to MVC later

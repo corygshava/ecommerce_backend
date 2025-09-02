@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Module Tester - MVC Class‐Existence Tool</title>
+	<link rel="stylesheet" type="text/css" href="../assets/docu.css">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+	<nav>
+		<h1><b>Module Tester</b></h1>
+		<ul>
+			<li><a href="#overview">Overview</a></li>
+			<li><a href="#getting-started">Getting Started</a></li>
+			<li><a href="#ui-flow">UI Flow</a></li>
+			<li><a href="#api">REST API</a></li>
+			<li><a href="#response-format">Response Format</a></li>
+			<li><a href="#testing-a-file">Testing a File</a></li>
+			<li><a href="#quick-start">Quick Start</a></li>
+		</ul>
+	</nav>
+
+	<main>
+	<section id="overview">
+		<h2>Overview</h2>
+		<p>
+			A lightweight, plug-and-play utility that quickly tells you which expected classes (Controller &amp; Model) actually exist for any given module in a <strong>CodeIgniter MVC</strong> project.  
+			Drop it in, log in once, and start validating your modules in seconds.
+		</p>
+	</section>
+
+	<section id="getting-started">
+		<h2>Getting Started</h2>
+		<h3>1. Install</h3>
+		<p>Copy the entire directory into your project root. No composer installs, no environment tweaks—just drag, drop, done.</p>
+
+		<h3>2. Grab the Access Key</h3>
+		<p>Look for the text file whose name is <em>obnoxiously</em> long (you literally can’t miss it). Open it and copy the key.</p>
+
+		<h3>3. Log In</h3>
+		<p>Visit <code>/module-tester</code>, paste the key, hit <kbd>Enter</kbd>.  
+		The key is stored in <code>sessionStorage</code> for the tab, so refresh-safe but not forever.</p>
+	</section>
+
+	<section id="ui-flow">
+		<h2>UI Flow</h2>
+		<ol>
+			<li><strong>Login screen</strong> – one input, one button.</li>
+			<li><strong>Module Tester UI</strong> – a single input for the module name (case-sensitive).</li>
+			<li><strong>Results panel</strong> – instant feedback plus optional “Test File” buttons.</li>
+		</ol>
+	</section>
+
+	<section id="api">
+		<h2>REST API Reference</h2>
+		<p class="endpoint">POST /test_ops.php</p>
+		<p>Body (JSON):</p>
+		<pre><code id="code1"></code></pre>
+		<p>Success HTTP code is <code class="w3-black">200</code>. Anything else means something went sideways.</p>
+	</section>
+
+	<section id="response-format">
+		<h2>Primary Response Object</h2>
+		<div class="response-block">
+			<div class="card">
+				<strong>maname</strong><br>
+				string – the exact module name you sent
+			</div>
+			<div class="card">
+				<strong>datapassed</strong><br>
+				bool – <code>true</code> if the module parameter was non-empty
+			</div>
+			<div class="card">
+				<strong>hascontroller</strong><br>
+				bool – <code>true</code> if <code>Controllers/{Module}.php</code> exists
+			</div>
+			<div class="card">
+				<strong>hasmodel</strong><br>
+				bool – <code>true</code> if <code>Models/{Module}Model.php</code> exists
+			</div>
+		</div>
+	</section>
+
+	<section id="testing-a-file">
+		<h2>Testing a File</h2>
+		<p>
+			When either the Controller or the Model is detected, a green button labeled <kbd>Test Controller code</kbd> or <kbd>Test Model code</kbd> appears.  
+			Clicking it fires a <code>fetch()</code> request to the file itself and returns:
+		</p>
+		<div class="response-block">
+			<div class="card success">
+				<strong>status</strong><br>
+				200 = OK, 500 = server error, anything else = “you fucked up”
+			</div>
+			<div class="card success">
+				<strong>status_text</strong><br>
+				"OK" or an error message
+			</div>
+			<div class="card success">
+				<strong>ajax_text</strong><br>
+				Should be empty if your PHP is clean
+			</div>
+			<div class="card success">
+				<strong>color</strong><br>
+				CSS class: <code>green</code> or <code>red</code>
+			</div>
+		</div>
+	</section>
+
+	<section id="quick-start">
+		<h2>Quick Start (TL;DR)</h2>
+		<ol>
+			<li>Copy folder (testsite) → project root.</li>
+			<li>Open the ridiculously-long-named text file → copy key.</li>
+			<li>Browse to <code>/module-tester</code>, enter key.</li>
+			<li>Type module name → hit <kbd>Enter</kbd>.</li>
+			<li>Green = good, red = bad, fix accordingly.</li>
+		</ol>
+	</section>
+
+	</main>
+
+	<script>
+		/* tiny sidebar toggle for mobile */
+		const nav = document.querySelector('nav');
+		document.addEventListener('click', e=>{
+			if(e.target.closest('nav') || e.target.matches('nav')) return;
+			if(window.innerWidth<=900) nav.classList.remove('open');
+		});
+		document.body.addEventListener('touchstart',()=>{});
+
+		// the codes
+		// post data sent to the API
+		code1.innerHTML = `{\n\t"themodule": "Blog"\n}`;
+	</script>
+</body>
+</html>

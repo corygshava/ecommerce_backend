@@ -1,0 +1,9 @@
+folder structure
+_assets/
+	(coryg boilerplate) -> the same ui kit i use for my apps but optimised for a dashboard
+help			-> holds algos, prompts, todo and odeas
+_res/
+	models 		-> basically objects that interact with db (steal as much code from regent)
+	controller	-> handles logic (basically has the crud functions plus handles interaction with the models)
+	views		-> handles storing of ui components to be used later (mostly JS scripts for post and php apis for pre)
+	actions		-> handles straightforward activities (db setup, temp connect algo, check session etc)

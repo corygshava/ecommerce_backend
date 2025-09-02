@@ -1,0 +1,42 @@
+folder structure
+_assets/(coryg trademarked boilerplate)
+help			-> holds algos, prompts, todo and odeas
+_res/
+	_justin		-> raw AI gen codes yet to be tested or implemented
+	_sitedata	-> website data and functions specific to this project
+	actions		-> handles straightforward activities (db setup, temp connect algo, check session etc)
+	controllers	-> handles logic (basically has the crud functions plus handles interaction with the models)
+	logfiles	-> records log details for debug use
+	models 		-> basically objects that interact with db (steal as much code from regent)
+	ui_templates-> these are interface pages used by /views to generate interfaces
+	views		-> handles storing and returning of ui components to be used later (mostly JS scripts for post and php apis for pre)
+
+sprint -> 01-09-2024
+
+objective
+come up with a fully functional admin panel by tomorrow at 9:30. it should have functionality for signing in, adding products and inventory management (basically should allow you to see everything you have and do actions like restock, reduce quantity and view product orders)
+
+for now it should use a simple system to display data in certain tables (the idea is that some data can just be shown via tables and dont have to be visualised e.g payments) so the idea is to make it that all relevant stuff is shown via a table first then modified to look better later
+
+(remember, make it work, then make it safe, them make it look good)
+
+steps
+	work on db ops
+	work on signin (using sessions)
+		implement signin process (login-validate-dash/error msg)
+		implement logout process (logout-clear sess data-login)
+	work on dashboard design (use Kimi to generate, remember speedy features now, UI overhaul later)
+		generate dashboard UI
+		create UI kit from it (use the one i have but modify it)
+		make it have a design like qasava gps but use iframes for the UI (should prevent issues with usin ajax later on (fingers crossed))
+	work on products module
+	work on products addition
+		make it possible to register products and all relevant details, (make it modifiable for later)
+		!!! make it possible to upload multiple images (like upload one now then another later then later and so on)
+	make it show stuff in a table
+	pull off full products CRUD
+		make it that a product's quantity cannot be reduced if its already been ordered for
+
+xtra
+	implement an API that allows a user to get info on available products (make it work then ill modify it later)
+

@@ -1,0 +1,5 @@
+/* holds all the fonts locally to reduce load times */
+@font-face {
+    font-family: 'poppins';
+    src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+}

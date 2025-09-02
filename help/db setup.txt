@@ -1,0 +1,7 @@
+db setup
+	admins
+		(stores data for all users with admin rights in the system)
+		id, username, email, password, last_login, last_logout_request
+	logs
+		(stores logs of all activities done in the system)
+		id, action, payload, module

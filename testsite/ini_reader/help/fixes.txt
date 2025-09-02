@@ -1,0 +1,14 @@
+[done]-----------------------------------------------------------
+make it that you can add entries
+
+[current]--------------------------------------------------------
+
+[pending]--------------------------------------------------------
+make section breaks (basically show where sections start)
+make it that you can add entries at specific sections
+make it that you can remove entries
+make it that you can delete entries
+make it that you can save the modified .ini with the same name or just view the new ini file look
+make it that you can read adjacent .ini files (such that you can view multiple entries in multiple language files)
+work on the editing and deleting functionality
+finish up the export options

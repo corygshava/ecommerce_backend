@@ -1,0 +1,20 @@
+make me documentation for a tool that tests if classes exist in a project made based on codeigniter MVC framework for PHP.
+
+consider that it first requires the user t login using an access key. the access key is stored in a text file with a really long name (you cant miss it).
+once the key is entered if its correct the system loads the module tester UI.
+in the module tester UI you enter the name of the module youre testing.
+when its submitted the data is sent to a REST API 'test_ops.php' that processes the passed module.
+the API will return an object containing these details
+	maname			=> the name of the module being tested
+	datapassed		=> whether data was passed or not
+	hascontroller	=> whether the module has a controller
+	hasmodel		=> whether the module has a model
+when the data is returned it will then be processed and the information displayed on the panel
+if the controller or module file is detected a button to test it will appear
+the button sends an fetch request to the file and returns this info
+	status			=> 200 means OK,500 means theres an error in the server, any other error means you fucked up
+	status_text		=> should be OK anything else means somethings up
+	ajax text 		=> should be blank if you coded the php file well
+	color 			=> green is good red is bad
+
+and thats all, feel free to try it out, like all solutions i made its plug and play and should work with any project as long as it follows the same structure as this one
