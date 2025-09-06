@@ -1,3 +1,3 @@
 <?php
-	say(">> packages loaded");
+	say(">> packages loaded","loadpackages");
 ?>

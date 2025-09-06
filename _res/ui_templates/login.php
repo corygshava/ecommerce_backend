@@ -9,11 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JRM admin panel - Login</title>
     <?php
-        include '_assets/pieces/head_piece.php';
+        require_once '_assets/pieces/head_piece.php'; // init styles
     ?>
 </head>
 <body>
-    <div class="content">
+    <div class="content centroid t2">
         <div class="container formguy w3-animate-zoom" data-shown="1" id="login">
             <div class="hd">
                 <span class="h2">My Admin</span>
@@ -47,7 +47,7 @@
                     <label for="rememberMe">Remember me</label>
                 </div>
 
-                <button type="submit" class="login btn">
+                <button type="submit" class="in_fullwidth btn multicolor">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="container w3-animate-zoom" data-shown="0" id="forget">
+        <div class="container formguy w3-animate-zoom" data-shown="0" id="forget">
             <div class="hd">
                 <span class="h3">Forgot password?</span>
                 <p>enter your registered email to get the password reset link</p>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="login btn">
+                <button type="submit" class="in_fullwidth btn multicolor">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
@@ -116,11 +116,11 @@
 
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
-                this.parentElement.querySelector('i').style.color = 'var(--primary)';
+                // this.parentElement.querySelector('i').style.color = 'var(--primary)';
             });
             
             input.addEventListener('blur', function() {
-                this.parentElement.querySelector('i').style.color = 'var(--gray)';
+                // this.parentElement.querySelector('i').style.color = 'var(--gray)';
             });
         });
 

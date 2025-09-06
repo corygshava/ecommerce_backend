@@ -11,6 +11,8 @@ RewriteRule ^ - [L]
 #    Existing GET params are preserved
 RewriteRule ^_handlereq/(.*)$ _dataops.php?rt=$1 [L,QSA]
 RewriteRule ^_dataops/(.*)$ _dataops.php?rt=$1 [L,QSA]
+RewriteRule ^_api/(.*)$ _dataops.php?isapi=yes&rt=$1 [L,QSA]
+RewriteRule ^_view/(.*)$ _dataops.php?viewcall=yes&rt=$1 [L,QSA]
 
 # 3) Map single-segment, extensionless paths to same-name .php
 #    Works for things like /about → about.php (if about.php exists)

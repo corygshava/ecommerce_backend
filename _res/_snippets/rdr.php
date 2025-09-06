@@ -1,11 +1,13 @@
 <?php
-	require_once '../_sitedata/.sitedata.php';
-	require_once '../init.php';
+	require_once __DIR__.'/../_sitedata/.sitedata.php';
+	require_once __DIR__.'/../init.php';
 
 	// this sippet helps handle redirects
 	function send_home(){
 		global $homepage;
-		header("Location: $homepage");
+		global $baseloc;
+
+		header("Location: {$baseloc}$homepage");
 	}
 
 	function send_here($where='./'){

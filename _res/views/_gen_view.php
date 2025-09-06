@@ -1,5 +1,6 @@
 <?php
 	class genview{
+		public static $scripts_created = 0;
 		// this class allows the system to read the contents of a file and echo it
 		// just a lazy way to prevent the chaos of redirects
 
@@ -26,8 +27,12 @@
 			include __DIR__."/../ui_templates/dashboard.php";
 		}
 
+		public function gen_dash_x(){
+			include __DIR__."/../ui_templates/dashboard.php";
+		}
+
 		public function gen_login(){
-			writeme($this->showthis(__DIR__."/../ui_templates/login.php"));
+			include __DIR__."/../ui_templates/login.php";
 		}
 
 		public function gen_login_x($passdata='none'){
@@ -46,6 +51,38 @@
 
 		public function gen_list($thelist,$mydata=null){
 			include __DIR__.'/../ui_templates/fullpage_list.php';
+		}
+
+		public function gen_script($thedata){
+			self::$scripts_created += 1;
+
+			$cre8 = self::$scripts_created;
+			$output = json_encode($thedata);
+
+			include __DIR__.'/../_snippets/json_error_check.php';
+			$iserr = json_we_good();
+			say($iserr,"view_genview");
+
+			if($iserr !== "none"){
+				$output = $thedata;
+			}
+
+			echo <<<HTML
+				<script>
+					let prepro_{$cre8}_var = JSON.parse(`$output`);
+				</script>
+			HTML;
+		}
+
+		public function gen_sidebar(){
+			include __DIR__.'/gen_sidebar.php';
+		}
+
+		public function gen_ai_styles(){
+			// include __DIR__.'/../ui_templates/tmp_styles.php';
+			echo <<<HTML
+				<!--<script>alert(`fuck this`)</script>;-->
+			HTML;
 		}
 	}
 ?>

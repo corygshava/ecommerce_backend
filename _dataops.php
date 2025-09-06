@@ -1,7 +1,27 @@
 <?php
-	echo "<base href=\"../\"/>";
+	echo <<<HTML
+		<base href="../"/>
+	HTML;
+	require_once '_assets/pieces/head_piece.php'; // init styles
+?>
 
+<?php
 	if(isset($_GET['rt'])){
+		require_once __DIR__.'/_res/init.php';
+
+		$isapi = false;
+		$isviewcall = false;
+
+		if(isset($_GET['isapi'])){
+			say("API call registered","dataops");
+			// exit();
+		}
+
+		if(isset($_GET['viewcall'])){
+			say("API call registered","dataops");
+			// exit();
+		}
+
 		// figure which route to take
 		$gl_thepath = $_GET['rt'];
 		$extrareq = "";
@@ -13,7 +33,6 @@
 			$extrareq = $dlist[1];
 		}
 
-		require_once __DIR__.'/_res/init.php';
 		say('wait it works???',"_dataops");
 
 		$outinfo = json_encode($_GET,null,4);
@@ -31,13 +50,33 @@
 				$actions[$gl_theroute]($pld);
 			} else {
 				say("no route found","_dataops");
+				if($isapi){
+					$response = [
+						"success" => false,
+						"message" => "invalid request route"
+					];
+				} else {
+					$genui->gen_alert2("Invalid request","ERROR","javascript:hostory.back()");
+				}
 			}
 		} catch(Exception $e) {
 			$showcon = true;
 			say("error: $e","_dataops");
 		}finally{
 			// renders a page that shows all logs created, might mess up the page's design
-			$genui->gen_list($echolog,['includeheader' => $showcon,'attribs' => 'data-shown=0']);
+			$showcon = false;
+			// $genui->gen_list($echolog,['includeheader' => $showcon,'attribs' => 'data-shown=1']);
+			// $genui->gen_script(json_encode($echolog));
+
+			if(!$isapi){
+				$out = json_encode(implode("_dvdr_", $echolog));
+
+				echo <<<HTML
+					<script>
+						sessionStorage.setItem('lastlog',$out);
+					</script>
+				HTML;
+			}
 		}
 	} else {
 		echo "yep waste of time";

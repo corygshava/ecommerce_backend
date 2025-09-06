@@ -1,6 +1,7 @@
 let stylesmade = false;
 
 function mekstyles() {
+	let zindex = 24;
     let mystyles = `
     	/* alert holder */
 
@@ -12,7 +13,7 @@ function mekstyles() {
 			height: auto;
 			pointer-events: none;
 			padding: 20px 30px 80px 30px;
-			z-index: 4;
+			z-index: ${zindex};
     		--c: #fff;
     		--altc: #000;
 		}

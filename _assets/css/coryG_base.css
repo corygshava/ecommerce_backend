@@ -1,24 +1,8 @@
 :root {
-	--themecolor: #e58d9d;
+	--themecolor: #d4af37;
 	--seccolor: #d46f92;
-	--darkcolor: #c00909;
-	--clr-theme-dark: var(--darkcolor);
-	--clr-bg: #efefef;
-	/* --clr-bg: red; */
-	--clr-bgglass: #efefefaa;
-	--clr-darkglass: #000000aa;
-	--clr-whiteglass: #efefefaa;
-	--clr-panelbg: #efefef;
-	--clr-alttext: #fefefe;
-	--clr-text: #222;
-	--clr-text-muted: #999;
-	--clr-mode: #000;
-	--clr-altmode: #fff;
-	--borderdesktop: transparent;
-	--themeglow: 0 0 16px var(--themecolor);
-	--themeshadow: 0 0 16px rgba(0,0,0,0.7);
-	--lightshadow: 0 0 16px rgba(0,0,0,0.2);
-	--overlaybg: rgba(0,0,0,0.8);
+	--darkcolor: #ff4d4d;
+
 	--size-tn: 8px;
 	--size-sm: 16px;
 	--size-nm: 24px;
@@ -27,6 +11,8 @@
 	--size-mg: 64px;
 	--roundness: 8px;
 	--minspan: 800px;
+
+	--sidebar-width: 250px;
 }
 
 /* imgs */
@@ -37,7 +23,7 @@
 	--herobg1: url('../img/demos/demoimg3.jpg');
 }
 
-*{
+*,*::before,*::after{
 	box-sizing: border-box;
 	transition: 0.3s ease-out;
 }
@@ -76,7 +62,7 @@ a{
 		.hedtxt3,.h3{
 			font-size: min(var(--size-md,1.75vw));
 		}
-		.hedtxt b,.h1 b,.hedtxt2 b,.hedtxt3 b,.h2 b{color: var(--themecolor);font-family: 'Great Vibes';}
+		.hedtxt b,.h1 b,.hedtxt2 b,.hedtxt3 b,.h2 b{color: var(--themecolor);font-family: 'Inter_24pt';}
 
 	/* ---------- 1. Buttons ----------------- */
 		.btn{
@@ -85,8 +71,11 @@ a{
 			justify-content:center;
 			gap:.5rem;
 			padding:.75rem 1.5rem;
-			border-radius:0px;
 			font-weight:600;
+			background: linear-gradient(135deg, var(--themecolor), var(--clr-theme-dark));
+			border: none;
+			border-radius: var(--roundness);
+			font-weight: 600;
 			cursor:pointer;
 			text-shadow: none;
 			border:none;
@@ -97,6 +86,8 @@ a{
 		.btn.outline.light{background:transparent;color:var(--seccolor);border:1px solid var(--seccolor)}
 		.btn.outline.dark{background:transparent;color:var(--darkcolor);border:1px solid var(--darkcolor)}
 		.btn.outline:hover{background:var(--seccolor);color:#fff;border: 1px solid var(--themecolor);}
+		.btn.multicolor {background: linear-gradient(135deg, var(--themecolor), var(--darkcolor));color: var(--clr-alttext); !important;}
+		.btn:hover {transform: translateY(-2px);box-shadow: var(--themeglow);color: var(--clr-text);}
 
 	/* ---------- 2. navbar ------------------ */
 		nav{
@@ -661,7 +652,9 @@ a{
 
 	/*.container{width:min(90%,1200px);margin-inline:auto}*/
 	.fullheight{min-height: 100vh;}
-	.fullwidth{min-height: 100vw;}
+	.fullwidth{min-width: 100vw;}
+	.in_fullheight{height: 100%;}
+	.in_fullwidth{width: 100%;}
 	.section{padding-block:5rem}
 
 	.cta-btn{

@@ -1,7 +1,8 @@
     <link rel="stylesheet" href="_assets/css/fa-all.css">
     <link rel="stylesheet" href="_assets/css/fonts.css">
     <link rel="stylesheet" href="_assets/css/w3.css">
-    <link rel="stylesheet" href="_assets/css/theme.css">
+    <!-- <link rel="stylesheet" href="_assets/css/theme.css"> -->
+    <link rel="stylesheet" href="_assets/css/tmp_styles.css">
     <link rel="stylesheet" href="_assets/css/coryG_base.css">
     <link rel="stylesheet" href="_assets/css/coryG_UIOps.css">
 

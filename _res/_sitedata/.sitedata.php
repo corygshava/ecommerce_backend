@@ -21,14 +21,26 @@
 			];
 
 	// site based variables
-	$homepage = "/index.php";			// kinda obvious
-	$baseloc = "/ecommerce_admin";
+	$homepage = "/index";				// kinda obvious
+	$baseloc = "/ecommerce_admin";		// made to make migration easier
+	$hideechos = false;					// show echoes made by say()
 	$hideechos = true;					// show echoes made by say()
 	$mekecholog = true;					// keep a list of echoes called by say()
 	$echolog = array();					// list of echoes
 
-	// code level variables
-	$tym_format = "Y-m-d H:i:s";
+	// system code level variables
+	$sys_tymformat = "Y-m-d H:i:s";
+	$sys_sessionExpiry = 7200;			// 1 hour = 3600
+	$sys_sessionLifetime = 1800;		// 10 minutes = 600
+
+	// session variables
+	$sess_lastact = 'last_activity';
+	$sess_id_creationtym = "created";
+
+	// user session parameters
+	$sess_logged_in = "logged_in";
+	$sess_user_id = "user_id";
+	$sess_username = "username";
 
 	// echo "<hr>sitedata called<hr>";
 ?>
