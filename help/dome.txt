@@ -11,4 +11,11 @@ make an api handler
 make a full CRUD module for admin management
 make a full CRUD module for products
 	make an API endpoint for getting products
+
+make view handler
+	for items addition
+make API handler
+	for products addition x viewing
+
+
 work on client experience

@@ -6,11 +6,11 @@
         public $href;           // anchor link to navigate to
         public $icon;           // what fa5 icon to use
 
-        public function __construct($hrf,$lnk='',$cap='',$ico='home',$pfix='#'){
+        public function __construct($hrf,$lnk='',$cap='',$ico='home',$pfix='#',$lnkprf='_view/',$sufx=''){
             $cap = $cap == '' ? $hrf : $cap;
             $lnk = $lnk == '' ? $hrf : $lnk;
 
-            $this->link = $lnk;
+            $this->link = $lnkprf.$lnk.'?'.$sufx;
             $this->caption = $cap;
             $this->href = $pfix.$hrf;
             $this->icon = $ico;
@@ -19,9 +19,13 @@
 
     // the sidebar items
     $nav_items = array(
-        new navitem('dashboard','','','tachometer-alt'),
-        new navitem('test API','','','microchip'),
-        new navitem('account','','user')
+        new navitem('dashboard','overview','','tachometer-alt'),
+        new navitem('test_API','test','','microchip','#','_api/'),
+        new navitem('products_API','get_products','','microchip','#','_api/'),
+        new navitem('update_db','updatedb','','database','#','_api/'),
+        new navitem('test_View','test','','microchip'),
+        new navitem('add_product','additem','add product','warehouse','#','_view/','model=products'),
+        new navitem('account','v_account','user')
     );
 
     foreach ($nav_items as $navl) {
@@ -31,7 +35,7 @@
         $link = $navl->link;
 
         echo <<<HTML
-            <a href="$href" data-mylink="$link" data-role="sidebar-btn"><i class="fas fa-$icon"></i> $caption</a>
+            <a href="$href" data-mylink="$link" data-mycaption="$caption" data-role="sidebar-btn"><i class="fas fa-$icon"></i> $caption</a>
         HTML;
     }
 

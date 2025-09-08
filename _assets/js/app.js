@@ -1,6 +1,7 @@
 let sidebar = undefined;
 let sidelinks = [];
 let crumbs = undefined;
+let theframe = undefined;
 
 // dashboard functions
 function init_sidebar() {
@@ -21,7 +22,7 @@ function init_sidelinks() {
 		// l.innerText += '>> ilv dad';
 
 		l.addEventListener('click',() => {
-			sidelink(id,l.dataset.mylink);
+			sidelink(id);
 		})
 	})
 
@@ -41,24 +42,45 @@ function init_crumbs(path="dashboard") {
 	}
 }
 
-function sidelink(n,txt) {
+function init_ui() {
+	theframe = document.querySelector('iframe');
+
+	theframe.addEventListener('load',() => {
+		theframe.animate([...fadeout].reverse(),timing);
+	})
+}
+
+function hide_frame() {
+	theframe.animate(hideme,{...timing, duration: 70});
+}
+
+function sidelink(n) {
 	sidelinks.forEach(el => {el.classList.remove('active');});
 
-	sidelinks[n].classList.add('active');
+	let el = sidelinks[n];
+	let txt = el.dataset.mylink;
+	let cap = el.dataset.mycaption;
+
+	el.classList.add('active');
+
 	getdata(txt);
-	init_crumbs(txt);
+	init_crumbs(cap);
 }
 
 // data getters
-function getdata(where){
-	alert_dark(`sending request to [api/${where}]`);
+function getdata(where,ovr){
+	let desti = where;
+	alert_dark(`sending request to [${desti}]`);
 
-	theframe = document.querySelector('iframe');
-	theframe.src = '_api/' + where;
+	setTimeout(() => {
+		hide_frame();
+		theframe.src = desti;
+	},100);
 }
 
 // loader
 window.addEventListener('load',() => {
 	init_sidebar();
 	init_crumbs();
+	init_ui();
 })

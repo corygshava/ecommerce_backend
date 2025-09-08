@@ -24,11 +24,12 @@ function mekstyles() {
 
 		.alert {
 			position: relative;
-			padding: 1.2em 2em;
+			padding: 8px 16px;
 			margin-bottom: 20px;
 			color: var(--c);
 			border-radius: var(--roundness);
-			width: 100%;
+			width: fit-content;
+    		min-width: 300px;
 			max-width: 400px;
     		font-weight: 700;
 		}
@@ -130,7 +131,7 @@ function alert_light(message,time) {showAlert(message,time,"light");}
 function alert_dark(message,time) {showAlert(message,time,"dark");}
 
 window.addEventListener('keydown',(e) => {
-	if(e.key.toLowerCase() == 'tab'){
+	if(e.key.toLowerCase() == 'tab' && e.shiftKey){
 		let mystring = mekRandomString(16);
 		showAlert(`random string : ${mystring}`,7,'warning');
 	}

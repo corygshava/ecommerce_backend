@@ -89,6 +89,9 @@ body::before {
 	justify-content: stretch;
 	align-items: stretch;
 }
+.content.inframe{
+	padding-top: 70px;
+}
 
 /* kmi's new UI kit */
 	/* ---------- n0. login form ----------------- */
@@ -241,29 +244,35 @@ body::before {
 		}
 
 	/* ---------- n2. main content ----------------- */
-		main.main-content{
-			position: relative;
-			flex: 1;
-	        background-color: var(--clr-lighter);
-	        height: 100vh;
-	        overflow: hidden auto;
+		main.main-content {
+		    position: relative;
+		    flex: 1;
+		    background-color: var(--clr-lighter);
+		    height: 100vh;
+		    overflow: hidden;
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: stretch;
+		    align-items: stretch;
 		}
 		main iframe{
 			border: none;
+			height: calc(100vh - 75px);
 		}
 
 	/* ---------- n3. user navbar ----------------- */
 		.navbar {
-			background: var(--white);
-			padding: 16px 24px;
-			box-shadow: var(--shadow);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			position: sticky;
-			top: 0;
-			width: 100%;
-			z-index: 100;
+		    background: var(--white);
+		    padding: 8px 24px;
+		    box-shadow: var(--shadow);
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    /*position: fixed;*/
+		    top: 0;
+		    height: 75px;
+		    width: calc(100vw - var(--sidebar-width));
+		    z-index: 100;
 		}
 		.navbar [data-role="breadcrumb"] {
 			font-size: 14px;
@@ -284,8 +293,9 @@ body::before {
 			object-fit: cover;
 		}
 		.user-avatar {
-			width: 40px;
-			height: 40px;
+			width: 35px;
+			/*height: 40px;*/
+			aspect-ratio: 1;
 			border-radius: 50%;
 			background: linear-gradient(135deg, var(--gold), var(--gold-light));
 			display: flex;

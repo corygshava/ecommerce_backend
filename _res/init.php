@@ -46,4 +46,63 @@
 			$genui->gen_alert(json_encode($what),"data to validate");
 		}
 	];
+
+	$apis = [
+		"test" => function($pdata,&$res) {
+			$res = [
+				"success" => true,
+				"message" => "test successful"
+			];
+		},
+		"get_products" => function($pdata,&$res){
+			include __DIR__."/controllers/productsController.php";
+
+			productops::get_products($pdata,$res);
+		},
+		"add_product" => function($pdata,&$res){
+			include __DIR__."/controllers/productsController.php";
+
+			productops::add_products($pdata,$res);
+		},
+		"updatedb" => function($data,&$res){
+			$msg = "working";
+			$con = true;
+
+			try{
+				global $msg;
+
+				include __DIR__.'/actions/check_db_connect.php';
+			} catch(Exception $e){
+				$msg = "Error -> $e";
+				$con = false;
+			} finally{
+				$msg = $msg == "working" ? "database updated successfully" : $msg;
+				$res = ["success" => $con,"message" => $msg];
+			}
+		}
+	];
+
+	$viewops = [
+		"test" => function($pdata) {
+			global $genui;
+
+			$genui->gen_alert2('view test successful');
+		},
+		"overview" => function($pdata) {
+			global $genui;
+
+			$thepath = __DIR__."/ui_templates/inframe/dash_overview.php";
+
+			$genui->gen_this($thepath);
+		},
+		"additem" => function($pdata){
+			global $genui;
+
+			$m_name = isset($pdata['model']) ? $pdata['model'] : null;
+
+			if($m_name != null){
+				$genui->gen_add_item($m_name);
+			}
+		}
+	]
 ?>

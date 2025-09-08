@@ -9,6 +9,13 @@
 			'email text',
 			'last_login datetime default NULL',
 			'last_logout_request datetime default NULL'
+		),
+		"products" => array(
+			'id INT AUTO_INCREMENT PRIMARY KEY',
+			'p_name varchar(30) default null',
+			'p_stock int',
+			'p_price decimal(10,3)',
+			'p_photos text'
 		)
 	);
 

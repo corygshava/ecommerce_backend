@@ -11,3 +11,4 @@
     <script src="_assets/js/customalerter.js"></script>
     <script src="_assets/js/coryG_UIOps.js"></script>
     <script src="_assets/js/app.js"></script>
+    <script src="_assets/js/animate.js"></script>

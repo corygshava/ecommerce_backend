@@ -46,7 +46,16 @@
 
 			include __DIR__."/../ui_templates/fullpage_alt.php";
 			return;
-			writeme($this->showthis(__DIR__."/../ui_templates/fullpage_alt.php"));
+			writeme($this->showthis(__DIR__."/../ui_templates/inframe/fullpage_alt.php"));
+		}
+
+		public function gen_alert2($alert="",$heading="Alert!",$backlink="./"){
+			$alert = $alert;
+			$heading = $heading;
+			$backlink = $backlink;
+
+			include __DIR__."/../ui_templates/inframe/dash_alt.php";
+			return;
 		}
 
 		public function gen_list($thelist,$mydata=null){
@@ -83,6 +92,20 @@
 			echo <<<HTML
 				<!--<script>alert(`fuck this`)</script>;-->
 			HTML;
+		}
+
+		public function gen_this($loc){
+			if(is_file($loc)){
+				include "$loc";
+			} else {
+				$errtxt = "invalid file passed for generation";
+				say($errtxt,"gen_view");
+				$this->gen_alert2($errtxt);
+			}
+		}
+
+		public function gen_add_item($model='admins'){
+			include __DIR__.'/../ui_templates/inframe/additem.php';
 		}
 	}
 ?>

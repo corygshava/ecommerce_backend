@@ -206,7 +206,8 @@
 
 				/* Dashboard Content */
 				.dashboard-content {
-					padding: 40px;
+				    padding: 40px;
+				    width: 100vw;
 				}
 
 				.page-title {
@@ -669,7 +670,8 @@
 
 				/* Dashboard Content Styles */
 				.dashboard-content {
-					padding: 40px;
+				    padding: 40px;
+				    width: 100vw;
 				}
 
 				.page-title {
