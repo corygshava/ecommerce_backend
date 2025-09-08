@@ -45,9 +45,11 @@ function init_crumbs(path="dashboard") {
 function init_ui() {
 	theframe = document.querySelector('iframe');
 
-	theframe.addEventListener('load',() => {
-		theframe.animate([...fadeout].reverse(),timing);
-	})
+	if(theframe != undefined){
+		theframe.addEventListener('load',() => {
+			theframe.animate([...fadeout].reverse(),timing);
+		})
+	}
 }
 
 function hide_frame() {

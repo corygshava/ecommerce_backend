@@ -6,6 +6,10 @@
 		* @copyright 	(c) 2025 Corygproductions
 	*/
 
+	// load external scripts (just to be safe)
+	require_once __DIR__.'/functions.php';
+	require_once __DIR__.'/../../_packages/loadpackages.php';
+
 	// database connection data
 	$dbuser = "root";
 	$dbpass = "";
@@ -24,7 +28,7 @@
 	$homepage = "/index";				// kinda obvious
 	$baseloc = "/ecommerce_admin";		// made to make migration easier
 	$hideechos = false;					// show echoes made by say()
-	$hideechos = true;					// show echoes made by say()
+	$hideechos = true;					// comment this line to always show echos
 	$mekecholog = true;					// keep a list of echoes called by say()
 	$echolog = array();					// list of echoes
 
@@ -43,4 +47,23 @@
 	$sess_username = "username";
 
 	// echo "<hr>sitedata called<hr>";
+
+	// security setup
+	load_package('super_encryptor');
+	$encryptor = new super_encryptor();
+
+	$encdata = [
+		"offset" => 16,
+		"salt" => 'Ixwj',
+		"chunks" => 13
+	];
+
+	// security info
+	$ini_content = file_get_contents(__DIR__.'/.sitedata.ini');
+	$d_txt = $encryptor->decryptme($ini_content,$encdata['offset'],$encdata['salt']);
+	$sd_ = parse_ini_string($d_txt);
+
+	$apiaccesscode = $sd_['api_access_code'];
+	// print_r($securedata);
+	// exit();
 ?>

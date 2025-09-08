@@ -72,7 +72,8 @@ a{
 			gap:.5rem;
 			padding:.75rem 1.5rem;
 			font-weight:600;
-			background: linear-gradient(135deg, var(--themecolor), var(--clr-theme-dark));
+			/*background: linear-gradient(135deg, var(--themecolor), var(--clr-theme-dark));*/
+			background: var(--themecolor);
 			border: none;
 			border-radius: var(--roundness);
 			font-weight: 600;
@@ -86,8 +87,8 @@ a{
 		.btn.outline.light{background:transparent;color:var(--seccolor);border:1px solid var(--seccolor)}
 		.btn.outline.dark{background:transparent;color:var(--darkcolor);border:1px solid var(--darkcolor)}
 		.btn.outline:hover{background:var(--seccolor);color:#fff;border: 1px solid var(--themecolor);}
-		.btn.multicolor {background: linear-gradient(135deg, var(--themecolor), var(--darkcolor));color: var(--clr-alttext); !important;}
-		.btn:hover {transform: translateY(-2px);box-shadow: var(--themeglow);color: var(--clr-text);}
+		.btn.multicolor {background: linear-gradient(135deg, var(--themecolor), var(--darkcolor));color: var(--clr-alttext) !important; !important;}
+		.btn:hover {transform: translateY(-2px);box-shadow: var(--themeglow);color: var(--clr-text) !important;}
 
 	/* ---------- 2. navbar ------------------ */
 		nav{

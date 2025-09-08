@@ -8,8 +8,9 @@ function mekstyles() {
 		#alertContainer {
 			position: fixed;
 			bottom: 0;
-			left: 0;
+			right: 0;
 			width: 100%;
+    		max-width: fit-content;
 			height: auto;
 			pointer-events: none;
 			padding: 20px 30px 80px 30px;

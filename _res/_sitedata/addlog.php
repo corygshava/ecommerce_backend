@@ -5,9 +5,12 @@
     $logfile = __DIR__."/../logfiles/[{$daytamp}]_eventslog.log";
     $logline = isset($logline) ? $logline : "blank log request";
 
-    include __DIR__.'/fileops.php';
+    // include __DIR__.'/fileops.php';
 
-    $createres = create_file_if_missing($logfile);
+    $fylops = null;
+    load_packages('fileops','fileops',$fylops);
+
+    $createres = $fylops::create_file_if_missing($logfile);
 
     if($createres){
         file_put_contents($logfile, "\n[$tstamp] - $logline", FILE_APPEND | LOCK_EX);

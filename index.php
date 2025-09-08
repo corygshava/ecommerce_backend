@@ -5,7 +5,7 @@
 <?php
 	try{
 		require_once '_res/init.php';
-		include '_packages/loadpackages.php';
+		require_once '_packages/loadpackages.php';
 
 		// check login
 		require_once '_res/actions/check_session.php';

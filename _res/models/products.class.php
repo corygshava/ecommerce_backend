@@ -36,6 +36,7 @@
 		public $p_price;
 		public $p_photos;
 		public $p_desc;
+		public $p_long_desc;
 
 		public $response;
 		public $lastquery;
@@ -51,12 +52,56 @@
 		public static function read(){
 			self::$extraWhere = "publish = 1";
 			self::$columns = [
-				['db' => 'p_name', 'dt' => 0],
-				['db' => 'p_stock', 'dt' => 1],
-				['db' => 'p_price', 'dt' => 2],
-				['db' => 'p_photos', 'dt' => 3],
-				['db' => 'p_desc', 'dt' => 4],
-				['db' => 'id', 'dt' => 5, 'formatter' => function ($d, $row) {return $row;}]
+				[
+					'inputable'=> true,
+					'intype' => 'text',
+					'dtype' => 'text',
+					'caption' => 'product name',
+					'required' => true,
+					'db' => 'p_name', 
+					'dt' => 0],
+				[
+					'inputable'=> true,
+					'intype' => 'number',
+					'dtype' => 'int',
+					'caption' => 'stock amount',
+					'db' => 'p_stock', 
+					'dt' => 1],
+				[
+					'inputable'=> true,
+					'intype' => 'number',
+					'dtype' => 'int',
+					'caption' => 'product price (ksh)',
+					'db' => 'p_price', 
+					'dt' => 2],
+				[
+					'inputable'=> false,
+					'intype' => 'text',
+					'dtype' => 'text',
+					'caption' => 'photos',
+					'db' => 'p_photos', 
+					'dt' => 3],
+				[
+					'inputable'=> true,
+					'intype' => 'text',
+					'dtype' => 'text',
+					'caption' => 'short description',
+					'db' => 'p_desc', 
+					'dt' => 4],
+				[
+					'inputable'=> true,
+					'intype' => 'textarea',
+					'dtype' => 'text',
+					'caption' => 'longer description',
+					'db' => 'p_long_desc', 
+					'dt' => 4],
+				[
+					'inputable'=> false,
+					'intype' => 'number',
+					'dtype' => 'int',
+					'db' => 'id', 
+					'dt' => 5,
+					'formatter' => function ($d, $row) {return $row;}]
 			];
 		}
 
