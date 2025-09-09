@@ -36,7 +36,6 @@
 		public $p_price;
 		public $p_photos;
 		public $p_desc;
-		public $p_long_desc;
 
 		public $response;
 		public $lastquery;
@@ -54,6 +53,7 @@
 			self::$columns = [
 				[
 					'inputable'=> true,
+					'table_able' => true,
 					'intype' => 'text',
 					'dtype' => 'text',
 					'caption' => 'product name',
@@ -62,6 +62,7 @@
 					'dt' => 0],
 				[
 					'inputable'=> true,
+					'table_able' => true,
 					'intype' => 'number',
 					'dtype' => 'int',
 					'caption' => 'stock amount',
@@ -69,6 +70,7 @@
 					'dt' => 1],
 				[
 					'inputable'=> true,
+					'table_able' => true,
 					'intype' => 'number',
 					'dtype' => 'int',
 					'caption' => 'product price (ksh)',
@@ -76,6 +78,7 @@
 					'dt' => 2],
 				[
 					'inputable'=> false,
+					'table_able' => true,
 					'intype' => 'text',
 					'dtype' => 'text',
 					'caption' => 'photos',
@@ -83,20 +86,15 @@
 					'dt' => 3],
 				[
 					'inputable'=> true,
-					'intype' => 'text',
+					'table_able' => false,
+					'intype' => 'textarea',
 					'dtype' => 'text',
 					'caption' => 'short description',
 					'db' => 'p_desc', 
 					'dt' => 4],
 				[
-					'inputable'=> true,
-					'intype' => 'textarea',
-					'dtype' => 'text',
-					'caption' => 'longer description',
-					'db' => 'p_long_desc', 
-					'dt' => 4],
-				[
 					'inputable'=> false,
+					'table_able' => false,
 					'intype' => 'number',
 					'dtype' => 'int',
 					'db' => 'id', 
@@ -110,6 +108,16 @@
 			$where = $this->lastcondition == "" ? self::$extraWhere : $this->lastcondition;
 
 			$sql = "SELECT * FROM ".self::$tableName." WHERE $where";
+
+			say($sql,"products class");
+			$this->response = Qrun::run($sql);
+		}
+
+		public function getcount(){
+			self::$extraWhere = self::$extraWhere == "" ? " publish = 1" : self::$extraWhere;
+			$where = $this->lastcondition == "" ? self::$extraWhere : $this->lastcondition;
+
+			$sql = "SELECT COUNT(*) as amt FROM ".self::$tableName." WHERE $where";
 
 			say($sql,"products class");
 			$this->response = Qrun::run($sql);
@@ -143,11 +151,34 @@
 		}
 
 		public function create($values){
-			$sql = "INSERT INTO `".self::$tableName." 
-			 (`p_name`,`p_stock`,`p_price`,`p_desc`)
-			 VALUES (?,?,?,?)";
+			$thetable = self::$tableName;
+			$sql = "INSERT INTO `$thetable` (`p_name`,`p_stock`,`p_price`,`p_desc`,`created_by`) VALUES (?,?,?,?,?)";
+			$vals = array(
+				$values['p_name'],
+				$values['p_stock'],
+				$values['p_price'],
+				$values['p_desc'],
+				$values['created_by'],
+				// 'end'
+			);
+			$typs = array(
+				PDO::PARAM_STR,		// p_name
+				PDO::PARAM_INT,		// p_stock
+				PDO::PARAM_INT,		// p_price
+				PDO::PARAM_STR,		// p_desc
+				PDO::PARAM_INT,		// created_by
+			);
+
+			say("vals: ".count($vals),"products class");
+			say("typs: ".count($typs),"products class");
+			// exit();
+
+			if(count($vals) !== count($typs)){
+				$this->response = mekresponse("vals: ".count($vals)."<br>typs: ".count($typs)."<hr>".json_encode($vals));
+				return;
+			}
 
 			say($sql,"products class");
-			$this->response = Qrun::run($sql,$values);
+			$this->response = Qrun::run($sql,$vals,$typs);
 		}
 	}

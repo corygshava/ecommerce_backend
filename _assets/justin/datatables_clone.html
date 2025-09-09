@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vanilla DataTables Replica — Products</title>
+  <style>
+    /* Minimal DataTables-like styling */
+    :root{
+      --bg:#fafafa;--card:#fff;--muted:#6b7280;--accent:#1f2937;--border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif;background:var(--bg);margin:24px;color:var(--accent)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:0 1px 2px rgba(16,24,40,0.03)}
+
+    .dt-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+    .dt-left, .dt-right{display:flex;gap:12px;align-items:center}
+    label{font-size:13px;color:var(--muted)}
+    select,input[type="search"]{padding:6px 10px;border:1px solid var(--border);border-radius:6px}
+    input[type="search"]{width:220px}
+
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    thead th{background:#f8fafc;padding:10px 8px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+    thead th .colwrap{display:flex;align-items:center;gap:8px}
+    thead th .sort{font-size:10px;color:var(--muted);display:inline-block;width:10px}
+    tbody td{padding:10px 8px;border-bottom:1px solid #f1f5f9}
+    tbody tr:hover{background:#fbfdff}
+
+    .dt-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+    .info{color:var(--muted);font-size:13px}
+    .pagination{display:flex;gap:6px}
+    .page-btn{padding:6px 9px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer}
+    .page-btn.active{background:#111827;color:#fff;border-color:#111827}
+    .page-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+    /* responsive small screens */
+    @media (max-width:720px){
+      .dt-top{flex-direction:column;align-items:stretch}
+      input[type="search"]{width:100%}
+      thead th:nth-child(6),tbody td:nth-child(6){display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="card" style="max-width:1100px;margin:0 auto">
+    <h2 style="margin:0 0 12px 0">Products &mdash; Demo (vanilla DataTables)</h2>
+
+    <div class="dt-top">
+      <div class="dt-left">
+        <label>Show
+          <select id="pageLength" aria-label="Show entries">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+        entries</label>
+      </div>
+
+      <div class="dt-right">
+        <label>Search: <input type="search" id="globalSearch" placeholder="Search products..." /></label>
+      </div>
+    </div>
+
+    <div style="overflow:auto">
+      <table id="dt" aria-describedby="table-info">
+        <thead>
+          <tr>
+            <th data-key="id"><div class="colwrap">#<span class="sort">⇅</span></div></th>
+            <th data-key="name"><div class="colwrap">Product<span class="sort">⇅</span></div></th>
+            <th data-key="category"><div class="colwrap">Category<span class="sort">⇅</span></div></th>
+            <th data-key="price"><div class="colwrap">Price<span class="sort">⇅</span></div></th>
+            <th data-key="stock"><div class="colwrap">Stock<span class="sort">⇅</span></div></th>
+            <th data-key="rating"><div class="colwrap">Rating<span class="sort">⇅</span></div></th>
+            <th data-key="date"><div class="colwrap">Date Added<span class="sort">⇅</span></div></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="dt-bottom">
+      <div class="info" id="table-info">Showing 0 to 0 of 0 entries</div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data generator (products)
+    const categories = ['Clothing','Electronics','Home','Beauty','Sports','Toys'];
+    const adjectives = ['Pro','Lite','Max','Prime','Ultra','Neo','Eco'];
+    const items = ['T-shirt','Headphones','Blender','Cream','Bicycle','Doll','Sneakers','Camera','Watch','Backpack'];
+
+    function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+    function rndFloat(min,max,dec=2){return (Math.random()*(max-min)+min).toFixed(dec)}
+    function formatCurrency(n){return '$'+Number(n).toLocaleString()}
+
+    const data = Array.from({length:60}).map((_,i)=>{
+      const name = items[rnd(0,items.length-1)] + ' ' + adjectives[rnd(0,adjectives.length-1)];
+      const category = categories[rnd(0,categories.length-1)];
+      const price = rndFloat(8,999,2);
+      const stock = rnd(0,250);
+      const rating = (Math.random()*5).toFixed(1);
+      const date = new Date(Date.now() - rnd(0,1000)*24*3600*1000).toISOString().slice(0,10);
+      return {id:i+1,name,category,price,stock,rating,date}
+    })
+
+    // State
+    let state = {
+      page: 1,
+      pageLength: 10,
+      q: '',
+      sortKey: null,
+      sortDir: 'asc',
+      filtered: [...data]
+    }
+
+    // Elements
+    const tbody = document.querySelector('#dt tbody')
+    const info = document.getElementById('table-info')
+    const pagination = document.getElementById('pagination')
+    const pageLengthSel = document.getElementById('pageLength')
+    const searchInput = document.getElementById('globalSearch')
+    const headers = document.querySelectorAll('#dt thead th')
+
+    // Attach events
+    pageLengthSel.value = state.pageLength
+    pageLengthSel.addEventListener('change',e=>{ state.pageLength = Number(e.target.value); state.page = 1; render() })
+    searchInput.addEventListener('input',e=>{ state.q = e.target.value.trim().toLowerCase(); state.page = 1; filterAndRender() })
+
+    headers.forEach(h=>{
+      h.addEventListener('click',()=>{
+        const key = h.getAttribute('data-key')
+        if(state.sortKey===key) state.sortDir = state.sortDir==='asc' ? 'desc' : 'asc'
+        else { state.sortKey = key; state.sortDir = 'asc' }
+        updateSortIndicators(); filterAndRender()
+      })
+    })
+
+    function updateSortIndicators(){
+      headers.forEach(h=>{
+        const key = h.getAttribute('data-key')
+        const span = h.querySelector('.sort')
+        if(key===state.sortKey){ span.textContent = state.sortDir==='asc'? '▲' : '▼' }
+        else span.textContent = '⇅'
+      })
+    }
+
+    // Filtering and sorting
+    function filterAndRender(){
+      const q = state.q
+      state.filtered = data.filter(row=>{
+        if(!q) return true
+        return Object.values(row).some(v=>String(v).toLowerCase().includes(q))
+      })
+      if(state.sortKey) sortData()
+      render()
+    }
+
+    function sortData(){
+      const k = state.sortKey
+      const dir = state.sortDir === 'asc' ? 1 : -1
+      state.filtered.sort((a,b)=>{
+        let va = a[k], vb = b[k]
+        // numeric detection
+        if(!isNaN(Number(va)) && !isNaN(Number(vb))){ return (Number(va)-Number(vb))*dir }
+        // date detection (YYYY-MM-DD)
+        if(/^\d{4}-\d{2}-\d{2}$/.test(va) && /^\d{4}-\d{2}-\d{2}$/.test(vb)){
+          return (new Date(va) - new Date(vb)) * dir
+        }
+        return String(va).localeCompare(String(vb)) * dir
+      })
+    }
+
+    // Render table body and controls
+    function render(){
+      const total = state.filtered.length
+      const start = (state.page-1)*state.pageLength
+      const end = Math.min(start + state.pageLength, total)
+      const rows = state.filtered.slice(start,end)
+
+      tbody.innerHTML = rows.map(r=>`\
+        <tr>\
+          <td>${r.id}</td>\
+          <td>${r.name}</td>\
+          <td>${r.category}</td>\
+          <td>${formatCurrency(r.price)}</td>\
+          <td>${r.stock}</td>\
+          <td>${r.rating}</td>\
+          <td>${r.date}</td>\
+        </tr>`).join('')
+
+      info.textContent = total===0 ? 'No entries to show' : `Showing ${start+1} to ${end} of ${total} entries`
+      renderPagination(total)
+    }
+
+    function renderPagination(total){
+      const pages = Math.max(1, Math.ceil(total/state.pageLength))
+      if(state.page>pages) state.page = pages
+      const range = paginationRange(state.page, pages, 5)
+      pagination.innerHTML = ''
+
+      // prev
+      const prev = mkBtn('Prev', state.page===1)
+      prev.addEventListener('click',()=>{ if(state.page>1){ state.page--; render() } })
+      pagination.appendChild(prev)
+
+      range.forEach(p=>{
+        if(p==='...'){
+          const span = document.createElement('div'); span.className='page-btn'; span.textContent='...'; span.style.cursor='default'; pagination.appendChild(span); return
+        }
+        const btn = mkBtn(p, false, p===state.page)
+        btn.addEventListener('click',()=>{ state.page = p; render() })
+        pagination.appendChild(btn)
+      })
+
+      const next = mkBtn('Next', state.page===pages)
+      next.addEventListener('click',()=>{ if(state.page<pages){ state.page++; render() } })
+      pagination.appendChild(next)
+    }
+
+    function mkBtn(text, disabled=false, active=false){
+      const b = document.createElement('button')
+      b.className = 'page-btn' + (active? ' active':'')
+      b.textContent = text
+      if(disabled) b.disabled = true
+      return b
+    }
+
+    // compute pagination range similar to DataTables
+    function paginationRange(current, total, length){
+      const out = []
+      if(total<=length){ for(let i=1;i<=total;i++) out.push(i); return out }
+      const left = Math.max(1, current-Math.floor(length/2))
+      const right = Math.min(total, left + length -1)
+      if(left>1) out.push(1), out.push('...')
+      for(let i=left;i<=right;i++) out.push(i)
+      if(right<total) out.push('...'), out.push(total)
+      return out
+    }
+
+    // init
+    filterAndRender()
+    updateSortIndicators()
+
+    // keyboard shortcut: / focuses search (like many datatable setups)
+    // document.addEventListener('keydown',e=>{ if(e.key === '/' && document.activeElement !== searchInput){ e.preventDefault(); searchInput.focus() } })
+  </script>
+</body>
+</html>

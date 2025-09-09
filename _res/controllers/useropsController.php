@@ -5,6 +5,10 @@
 
 	// handles all operations to do with user sessions
 	class userops{
+		function __construct(){
+			say("instance created","con_userops");
+		}
+
 		public function logout(){
 			sessionops::killsession();
 		}
@@ -84,10 +88,12 @@
 			global $sess_logged_in;
 			global $sess_user_id;
 			global $sess_username;
+			global $sess_serial;
 
 			$_SESSION[$sess_logged_in] = true;
 			$_SESSION[$sess_user_id] = $uid;
 			$_SESSION[$sess_username] = $uname;
+			$_SESSION[$sess_serial] = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'),0,7);
 
 			return true;
 		}
@@ -97,6 +103,24 @@
 			global $sess_username;
 
 			return sessionops::check_session_data($sess_user_id) && sessionops::check_session_data($sess_username);
+		}
+
+		public function getudata(){
+			$res = null;
+
+			if(session_id() != ''){
+				global $sess_user_id;
+				global $sess_username;
+				global $sess_serial;
+
+				$res = array(
+					$_SESSION[$sess_user_id],
+					$_SESSION[$sess_username],
+					$_SESSION[$sess_serial]
+				);
+			}
+
+			return $res;
 		}
 	}
 ?>

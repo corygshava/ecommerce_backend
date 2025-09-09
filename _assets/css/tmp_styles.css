@@ -1,83 +1,20 @@
-@media (prefers-color-scheme: light) {
-	:root {
-		--clr-theme-dark: var(--darkcolor);
-		--clr-bg: #121212;
-		--clr-bgglass: #1e1e1eaa;
-		--clr-darkglass: #000000aa;
-		--clr-whiteglass: #2a2a2aaa;
-		--clr-panelbg: #1e1e1e;
-		--clr-alttext: #111;
-		--clr-text: #f5f5f5;
-		--clr-text-muted: #aaa;
-		--clr-mode: #000;
-		--clr-altmode: #fff;
-		--clr-lighter-dark: #181818;
-		--borderdesktop: #333;
-		--themeglow: 0 0 16px var(--themecolor);
-		--themeshadow: 0 0 16px rgba(0,0,0,0.9);
-		--lightshadow: 0 0 16px rgba(255,255,255,0.1);
-		--overlaybg: rgba(0,0,0,0.9);
-
-		--primary: #f5f5f5;
-		--gold: #d4af37;
-		--gold-light: #f4e5a1;
-		--dark: #0a0a0a;
-		--light: #1a1a1a;
-		--gray: #aaa;
-		--light-gray: #333;
-		--white: #121212;
-		--shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-		--shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.8);
-	}
-}
-@media (prefers-color-scheme: dark) {
-	:root {
-		--clr-theme-dark: var(--darkcolor);
-		--clr-bg: #efefef;
-		/* --clr-bg: red; */
-		--clr-bgglass: #efefefaa;
-		--clr-darkglass: #000000aa;
-		--clr-whiteglass: #efefefaa;
-		--clr-panelbg: #efefef;
-		--clr-text: #222;
-		--clr-alttext: #fefefe;
-		--clr-text-muted: #999;
-		--clr-mode: #fff;
-		--clr-altmode: #000;
-		--borderdesktop: transparent;
-		--themeglow: 0 0 16px var(--themecolor);
-		--themeshadow: 0 0 16px rgba(0,0,0,0.7);
-		--lightshadow: 0 0 16px rgba(0,0,0,0.2);
-		--overlaybg: rgba(0,0,0,0.8);
-
-		--primary: #1a1a1a;
-		--gold: #d4af37;
-		--gold-light: #f4e5a1;
-		--dark: #0a0a0a;
-		--light: #fafafa;
-		--gray: #666;
-		--light-gray: #f1f1f1;
-		--white: #ffffff;
-		--shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		--shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
-	}
-}
 
 hr{
 	border-color: var(--gray);
 }
+body{
+	background: #fff;
+}
 body::before {
-	content: '';
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: radial-gradient(circle at 0% 0%, 
-		rgba(251, 191, 36, 0.15) 0%, 
-		rgba(252, 211, 77, 0.08) 30%, 
-		transparent 70%);
-	z-index: -1;
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 0% 0%, var(--gold) 0%, var(--gold) 30%, transparent 70%);
+    z-index: -1;
+    opacity: 0.1;
 }
 
 /* kmi's new UI kit */
@@ -377,3 +314,107 @@ body::before {
 			border: 2px solid var(--gold);
 			outline: none;
 		}
+
+	/* ---------- n6. tables ----------------- */
+		.table-card {
+			background: var(--white);
+			border-radius: 16px;
+			box-shadow: var(--shadow);
+			overflow: hidden;
+		}
+
+		.table-header {
+			padding: 30px;
+			border-bottom: 1px solid var(--light-gray);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.table-title {
+			font-size: 18px;
+			font-weight: 600;
+			color: var(--primary);
+		}
+
+		.view-all-btn {
+			background: none;
+			border: 1px solid var(--gold);
+			color: var(--gold);
+			padding: 8px 16px;
+			border-radius: 8px;
+			font-size: 14px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.view-all-btn:hover {
+			background: var(--gold);
+			color: var(--white);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		th, td {
+			padding: 15px 30px;
+			text-align: left;
+			border-bottom: 1px solid var(--light-gray);
+		}
+
+		th {
+			font-weight: 600;
+			color: var(--primary);
+			font-size: 14px;
+		}
+
+		td {
+			color: var(--gray);
+			font-size: 14px;
+		}
+
+		.status {
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		.status.completed {
+			background: #064e3b;
+			color: #a7f3d0;
+		}
+
+		.status.processing {
+			background: #78350f;
+			color: #fde68a;
+		}
+
+		.status.pending {
+			background: #7f1d1d;
+			color: #fecaca;
+		}
+
+/* custom reusables */
+	[data-tooltip]{
+		position: relative;
+		overflow: visible;
+	}
+
+	[data-tooltip]::before{
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: 0;
+		left: 0%;
+		padding: 4px 8px;
+		color: var(--white);
+		background-color: var(--dark);
+		min-width: 100%;
+		opacity: 0;
+	}
+	[data-tooltip]:hover::before{
+		translate: 0 100%;
+		opacity: 1;
+	}

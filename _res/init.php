@@ -1,4 +1,5 @@
 <?php
+	// initialisers section
 	global $genui;
 
 	// loads utility classes necessary for use pretty much everywhere
@@ -8,6 +9,7 @@
 	require_once $pathprefix.'/_sitedata/.sitedata.php';
 	require_once $pathprefix.'/_sitedata/functions.php';
 	require_once $pathprefix.'/models/_Qrun.class.php';
+	require_once $pathprefix.'/../_packages/loadpackages.php';
 
 	require_once $pathprefix.'/controllers/sessionopsController.php';
 	sessionops::init_sessions();
@@ -21,7 +23,9 @@
 	$genui = new genview();
 
 	// the basecontroller class (if i create it)
+?>
 
+<?php
 	// list of action mappings
 	$actions = [
 		"trylogin" => function($passeddata){
@@ -59,10 +63,15 @@
 
 			productops::get_products($pdata,$res);
 		},
-		"add_product" => function($pdata,&$res){
+		"add_products" => function($pdata,&$res){
 			include __DIR__."/controllers/productsController.php";
 
 			productops::add_products($pdata,$res);
+		},
+		"get_products_count" => function($pdata,&$res){
+			include __DIR__."/controllers/productsController.php";
+
+			productops::get_products_count($pdata,$res);
 		},
 		"updatedb" => function($data,&$res){
 			$msg = "working";
@@ -102,6 +111,15 @@
 
 			if($m_name != null){
 				$genui->gen_add_item($m_name);
+			}
+		},
+		"viewdata" => function($pdata){
+			global $genui;
+
+			$m_name = isset($pdata['model']) ? $pdata['model'] : null;
+
+			if($m_name != null){
+				$genui->gen_view_data($m_name);
 			}
 		}
 	]

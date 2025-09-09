@@ -14,12 +14,19 @@
 
 	if($uops->isloggedin()){
 		say("session found, ending it","trylogout");
+		$udata = $uops->getudata();
 		$uops->logout();
 
-		// Log successful logout
-		$logline = "Logout successful: User ID {$userId}, Username {$username}";
-		say($logline,"checksession");
-		include __DIR__.'/../_sitedata/addlog.php';
+		if($udata != null){
+			$userId = $udata[0];
+			$username = $udata[1];
+			$sessionSerial = $udata[2];
+
+			// Log successful logout
+			$logline = "[$sessionSerial] Logout successful: User ID {$userId}, Username {$username}";
+			say($logline,"checksession");
+			include __DIR__.'/../_sitedata/addlog.php';
+		}
 	} else {
 		say("no session found, redirecting","trylogout");
 	}

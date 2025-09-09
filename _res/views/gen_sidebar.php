@@ -20,12 +20,13 @@
     // the sidebar items
     $nav_items = array(
         new navitem('dashboard','overview','','tachometer-alt'),
+        new navitem('update_db','updatedb','','database','#','_api/'),
+        new navitem('add_product','viewdata','products','warehouse','#','_view/','model=products'),
+        new navitem('account','v_account','user'),
         new navitem('test_API','test','','microchip','#','_api/'),
         new navitem('products_API','get_products','','microchip','#','_api/'),
-        new navitem('update_db','updatedb','','database','#','_api/'),
+        new navitem('products_API','get_products_count','number of products','microchip','#','_api/'),
         new navitem('test_View','test','','microchip'),
-        new navitem('add_product','additem','add product','warehouse','#','_view/','model=products'),
-        new navitem('account','v_account','user')
     );
 
     foreach ($nav_items as $navl) {

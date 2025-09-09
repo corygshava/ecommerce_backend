@@ -1,4 +1,5 @@
 let stylesmade = false;
+let alertlogs = [];
 
 function mekstyles() {
 	let zindex = 24;
@@ -74,52 +75,58 @@ function showAlert(alertMessage, alertTime, alertType) {
         mekstyles();
     }
 
-	// Create alert container if it doesn't exist
-	let alertContainer = document.getElementById('alertContainer');
+    if(alertType != "quiet"){
+		// Create alert container if it doesn't exist
+		let alertContainer = document.getElementById('alertContainer');
 
-	// Create alert element
-	const alertElement = document.createElement('div');
-	alertElement.className = `alert ${alertType} alert-dismissible fade show`;
-	alertElement.role = 'alert';
-	alertElement.innerHTML = `
-		${alertMessage}
-		<button type="button" class="closebtn w3-right w3-hide" data-bs-dismiss="alert" aria-label="Close">
-			<i class="fa fa-close"></i>
-		</button>
-	`;
+		// Create alert element
+		const alertElement = document.createElement('div');
+		alertElement.className = `alert ${alertType} alert-dismissible fade show`;
+		alertElement.role = 'alert';
+		alertElement.innerHTML = `
+			${alertMessage}
+			<button type="button" class="closebtn w3-right w3-hide" data-bs-dismiss="alert" aria-label="Close">
+				<i class="fa fa-close"></i>
+			</button>
+		`;
 
-	// Append alert to container
-	alertContainer.appendChild(alertElement);
+		// Append alert to container
+		alertContainer.appendChild(alertElement);
 
-	// animate coming in
-	let animoptions = {
-		duration: 300,
-		easing: 'ease-out',
-		fill: 'forwards'
-	};
-	let leaveAnim = [
-		{opacity: 1},
-		{opacity: 0}
-	];
-	alertElement.animate([
-		{opacity: 0,translate: '0 20px'},
-		{opacity: 1,translate: '0 0'}
-	],animoptions);
+		// animate coming in
+		let animoptions = {
+			duration: 300,
+			easing: 'ease-out',
+			fill: 'forwards'
+		};
+		let leaveAnim = [
+			{opacity: 1},
+			{opacity: 0}
+		];
+		alertElement.animate([
+			{opacity: 0,translate: '0 20px'},
+			{opacity: 1,translate: '0 0'}
+		],animoptions);
 
-	alertElement.querySelector('button').addEventListener('click',() => {
-		alertElement.animate(leaveAnim,animoptions);
-		setTimeout(() => alertElement.remove(), animoptions.duration + 50);
-	})
+		alertElement.querySelector('button').addEventListener('click',() => {
+			alertElement.animate(leaveAnim,animoptions);
+			setTimeout(() => alertElement.remove(), animoptions.duration + 50);
+		})
 
-	if(alertTime.toString().toLowerCase() != "infinity"){
-		setTimeout(() => {
-			if(alertElement != null){
-				alertElement.animate(leaveAnim,animoptions);
-				setTimeout(() => alertElement.remove(), animoptions.duration + 50); // Allow fade-out effect
-			}
-		}, alertTime * 1000);
+		if(alertTime.toString().toLowerCase() != "infinity"){
+			setTimeout(() => {
+				if(alertElement != null){
+					alertElement.animate(leaveAnim,animoptions);
+					setTimeout(() => alertElement.remove(), animoptions.duration + 50); // Allow fade-out effect
+				}
+			}, alertTime * 1000);
+		}
+		console.log(`i will die in ${alertTime} seconds`);
 	}
-	console.log(`i will die in ${alertTime} seconds`);
+
+    let timestamp = (new Date()).getTime();
+
+    alertlogs.push({msg: alertMessage,atype: alertType,atime: timestamp});
 }
 
 function alert_success(message,time) {showAlert(message,time,"success");}
@@ -130,9 +137,11 @@ function alert_primary(message,time) {showAlert(message,time,"primary");}
 function alert_secondary(message,time) {showAlert(message,time,"secondary");}
 function alert_light(message,time) {showAlert(message,time,"light");}
 function alert_dark(message,time) {showAlert(message,time,"dark");}
+function alert_quiet(message,time) {showAlert(message,time,"quiet");}
+function alert_silent(message,time) {showAlert(message,time,"quiet");}
 
 window.addEventListener('keydown',(e) => {
-	if(e.key.toLowerCase() == 'tab' && e.shiftKey){
+	if(e.key.toLowerCase() == 'tab'){
 		let mystring = mekRandomString(16);
 		showAlert(`random string : ${mystring}`,7,'warning');
 	}

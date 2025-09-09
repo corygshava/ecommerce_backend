@@ -7,12 +7,13 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # 2) Special rule for _dataops.php
-#    Anything requested as /_dataops.php/... is mapped to _dataops.php?rt=...
+#    Anything requested as /_dataops.php/... is mapped to _router.php?rt=...
 #    Existing GET params are preserved
-RewriteRule ^_handlereq/(.*)$ _dataops.php?rt=$1 [L,QSA]
-RewriteRule ^_dataops/(.*)$ _dataops.php?rt=$1 [L,QSA]
-RewriteRule ^_api/(.*)$ _dataops.php?isapi=yes&rt=$1 [L,QSA]
-RewriteRule ^_view/(.*)$ _dataops.php?viewcall=yes&rt=$1 [L,QSA]
+RewriteRule ^_handlereq/(.*)$ _router.php?rt=$1 [L,QSA]
+RewriteRule ^_dataops/(.*)$ _router.php?rt=$1 [L,QSA]
+RewriteRule ^_api/(.*)$ _router.php?isapi=yes&rt=$1 [L,QSA]
+RewriteRule ^_view/(.*)$ _router.php?viewcall=yes&rt=$1 [L,QSA]
+RewriteRule ^_route/(.*)$ _router.php?rt=$1 [L,QSA]
 
 # 3) Map single-segment, extensionless paths to same-name .php
 #    Works for things like /about → about.php (if about.php exists)

@@ -5,7 +5,10 @@
 <?php
 	try{
 		require_once '_res/init.php';
+
 		require_once '_packages/loadpackages.php';
+		say("exec start: ".time(),"index");
+		say("exec start: ".date('d/m/y h:i:s'),"index");
 
 		// check login
 		require_once '_res/actions/check_session.php';

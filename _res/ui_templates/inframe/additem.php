@@ -32,9 +32,14 @@
 
 	$fields = $instance::getinputFields();
 
+	// load navbar
+	include __DIR__.'/topnav.php';
+
+	add_nav($model);
+
 	echo <<<HTML
 		<div class="spacy-md">
-			<span class="h2">Add $model record</span>
+			<span class="h3">Add $model record</span>
 			<hr>
 			<form class="formholder" id="theform">
 				<!-- .inputholder>label[for="envalue"]{enter this}+input:text[name="envalue",id="envalue"] -->
@@ -93,26 +98,29 @@
 				hideform();
 
 				let fdata = new FormData(theform);
-				let data = Object.fromEntries(fdata.entries());
-
-				data.operation = `$optype`;
-				data.accesskey = `$apiaccesscode`;
+				fdata.append("operation",`$optype`);
+				fdata.append("accesskey",`$apiaccesscode`);
+				let dta = Object.fromEntries(fdata);
+				let payload = JSON.stringify(dta);
 				// console.log("fdata",fdata,"data",data);
+
+				console.log("sending: ",payload);
+				// return;
 
 				try{
 					const rest = await fetch('_api/{$optype}_{$model}',{
 						method: "POST",
 						headers: {
-							"Content-Type": "application/x-www-form-urlencoded"
+							"Content-Type": "application/json"
 						},
-						body: JSON.stringify(data)
+						body: payload
 					});
 
 					const result = await rest.text();
 
 					console.log(result);
 
-					return JSON.parse(result);
+					return (result);
 				} catch (err) {
 					console.error(err);
 					alert_danger(`error: \${err}`);
@@ -132,17 +140,22 @@
 			}
 
 			function showresult(obj){
-				if(obj == null){
+				console.log(obj);
+
+				let mdata = JSON.parse(obj);
+				console.log(mdata);
+				// alert_dark(obj.replaceAll(",","<br>"),45);
+
+				if(mdata == null){
 					// showform();
 					alert_danger("request incomplete");
 				}
 
-				if(obj.success){
-					alert_success(obj.message);
+				if(mdata.success){
+					alert_success("data added successfully");
 				} else {
-					alert_warning(obj.message);
+					alert_warning(mdata.result,45);
 				}
-				console.log(obj);
 			}
 		</script>
 	HTML;

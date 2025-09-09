@@ -28,7 +28,7 @@
 	$homepage = "/index";				// kinda obvious
 	$baseloc = "/ecommerce_admin";		// made to make migration easier
 	$hideechos = false;					// show echoes made by say()
-	$hideechos = true;					// comment this line to always show echos
+	// $hideechos = true;					// comment this line to always show echos
 	$mekecholog = true;					// keep a list of echoes called by say()
 	$echolog = array();					// list of echoes
 
@@ -40,11 +40,6 @@
 	// session variables
 	$sess_lastact = 'last_activity';
 	$sess_id_creationtym = "created";
-
-	// user session parameters
-	$sess_logged_in = "logged_in";
-	$sess_user_id = "user_id";
-	$sess_username = "username";
 
 	// echo "<hr>sitedata called<hr>";
 
@@ -64,6 +59,28 @@
 	$sd_ = parse_ini_string($d_txt);
 
 	$apiaccesscode = $sd_['api_access_code'];
+	$hideechos = $sd_['hide_echoes'] == "true";
+	$echoesout = $hideechos ? "yes, dont show echoes" : "no, show echoes";
+
+	// user session parameters
+	$sess_logged_in = $sd_['sess_logged_in'];
+	$sess_user_id = $sd_['sess_user_id'];
+	$sess_username = $sd_['sess_username'];
+	$sess_serial = $sd_['sess_serial'];
+
+	// $hideechos = true;
+	// $hideechos = false;
+
+	// for debug purposes
+	/*
+		file_put_contents(__DIR__.'/.sitedata.ok.ini', $d_txt);
+		echo '<hr>';
+			print_r($sd_);
+		echo "e: $echoesout<br><hr>";
+	*/
+
+	// true -> JHKu
+	// false -> vaBIu
 	// print_r($securedata);
 	// exit();
 ?>

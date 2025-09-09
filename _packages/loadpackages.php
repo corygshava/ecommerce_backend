@@ -13,7 +13,7 @@
 		}
 
 		require_once $pkgfile;
-		say("package loaded : ($pkg)","loadpackages");
+		say_silent("package loaded : ($pkg)","loadpackages");
 
 		if($instance != null){
 			if(class_exists($classname)){

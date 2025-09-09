@@ -14,7 +14,8 @@
 			'id INT AUTO_INCREMENT PRIMARY KEY',
 			'p_name varchar(30) default null',
 			'p_stock int',
-			'p_price decimal(10,3)',
+			'p_price decimal(10,2)',
+			'p_desc text default null',
 			'p_photos text'
 		)
 	);

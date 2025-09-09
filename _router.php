@@ -11,11 +11,14 @@
 	if(isset($_GET['rt'])){
 		require_once __DIR__.'/_res/init.php';
 
+		say("exec start: ".time(),"index");
+		say("exec start: ".date('d/m/y h:i:s'),"index");
+
 		$isapi = false;
 		$isviewcall = false;
 
 		if(isset($_GET['isapi'])){
-			say("API call registered","dataops");
+			say("API call registered","_router");
 			$isapi = true;
 			// exit();
 		}
@@ -25,7 +28,7 @@
 		}
 
 		if(isset($_GET['viewcall'])){
-			say("view call registered","dataops");
+			say("view call registered","_router");
 			$isviewcall = true;
 			// echo $_GET['rt'];
 			// exit();
@@ -42,27 +45,55 @@
 			$extrareq = $dlist[1];
 		}
 
-		say('wait it works???',"_dataops");
+		say('wait it works???',"_router");
 
 		$outinfo = json_encode($_GET,null,4);
-		say($outinfo,"_dataops");
+		say($outinfo,"_router");
 
 		try{
 			global $isapi;
 			global $isviewcall;
 
 			$showcon = false;
-			$pld = count($_POST) !== 0 ? $_POST : (count($_GET) !== 0 ? $_GET : []);
+			$pld = [];
+			if(count($_POST) !== 0){
+				$pld = array_merge($pld,$_POST);
+			}
+			if(count($_GET) !== 0){
+				$pld = array_merge($pld,$_GET);
+			}
+
+			$data = file_get_contents('php://input');
+
+			if($data !== ""){
+				say($data,"_router");
+				$tm_list = json_decode($data,true);
+				say($tm_list,"_router");
+				$dlist = $tm_list == null ? [] : $tm_list;
+				$pld = array_merge($pld,$dlist);
+				say(json_encode($pld),"_router");
+
+				if (json_last_error() !== JSON_ERROR_NONE) {
+				    throw new Exception("JSON decode error: ".json_last_error_msg(), 1);
+				}
+			}
+
+			if($isapi){
+				// exit();
+				header("Content-Type = application/json");
+			}
+
+			// print_r($pld);
 			$addme = ["pathdata" => $extrareq];
 			$pld = array_merge($pld,$addme);
 
 			if(isset($actions[$gl_theroute]) && !$isapi){
-				say("route found","_dataops");
+				say("route found","_router");
 
 				$actions[$gl_theroute]($pld);
 			} else {
 				if($isapi && isset($apis[$gl_theroute])){
-					say("apis route found","_dataops");
+					say("apis route found","_router");
 					$response = null;
 					// $pld = count($_)
 
@@ -79,10 +110,10 @@
 						echo json_encode($response);
 					}
 				} elseif($isviewcall && isset($viewops[$gl_theroute])) {
-					say("viewops route found","_dataops");
+					say("viewops route found","_router");
 					$viewops[$gl_theroute]($pld);
 				} else {
-					say("no route found","_dataops");
+					say("no route found","_router");
 					if($isapi){
 						$response = [
 							"success" => false,
@@ -97,7 +128,7 @@
 			}
 		} catch(Exception $e) {
 			$showcon = true;
-			say("error: $e","_dataops");
+			say("error: $e","_router");
 		}finally{
 			// renders a page that shows all logs created, might mess up the page's design
 			$showcon = false;
@@ -113,8 +144,11 @@
 					</script>
 				HTML;
 			}
+
+			say("exec end: ".time(),"index");
+			say("exec end: ".date('d/m/y h:i:s'),"index");
 		}
 	} else {
-		echo "yep waste of time";
+		echo "yep, youre wasting your time";
 	}
 ?>

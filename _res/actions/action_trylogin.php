@@ -27,7 +27,20 @@
 			$uops->startSession($uname,$uid);
 			say("session set up userid: ".$_SESSION[$sess_user_id],"trylogin");
 			say("session set up uname: ".$_SESSION[$sess_username],"trylogin");
-			// exit();
+
+			$udata = $uops->getudata();
+
+			if($udata != null){
+				$userId = $udata[0];
+				$username = $udata[1];
+				$sessionSerial = $udata[2];
+
+				// Log successful logout
+				$logline = "[$sessionSerial] Login successful: User ID {$userId}, Username {$username}";
+				say($logline,"checksession");
+				include __DIR__.'/../_sitedata/addlog.php';
+			}
+
 			send_home();
 		} else {
 			say("attempt result: $attemptres","trylogin");

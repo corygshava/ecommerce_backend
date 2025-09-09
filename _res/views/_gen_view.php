@@ -107,5 +107,9 @@
 		public function gen_add_item($model='admins'){
 			include __DIR__.'/../ui_templates/inframe/additem.php';
 		}
+
+		public function gen_view_data($model='admins'){
+			include __DIR__.'/../ui_templates/inframe/viewdata.php';
+		}
 	}
 ?>
