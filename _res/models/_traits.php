@@ -70,7 +70,7 @@
 			$outlist = [];
 
 			foreach($lst as $item){
-				if($item['table_able']){
+				if($item['table_able'] || $item['db'] == self::$primaryKey){
 					$cap = isset($item['caption']) ? $item['caption'] : $item['db'];
 					$req = isset($item['required']) ? $item['required'] : true;
 					$wot = array("name" => $item['db'],"type" => $item['intype'], "caption" => $cap,"required" => $req);

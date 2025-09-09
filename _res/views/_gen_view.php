@@ -109,7 +109,7 @@
 		}
 
 		public function gen_view_data($model='admins'){
-			include __DIR__.'/../ui_templates/inframe/viewdata.php';
+			include __DIR__.'/../ui_templates/inframe/viewdata_beta.php';
 		}
 	}
 ?>

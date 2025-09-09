@@ -73,6 +73,27 @@
 
 			productops::get_products_count($pdata,$res);
 		},
+		"get_fields" => function($pdata,&$res){
+			// echo json_encode($pdata);
+			if(isset($pdata['module'])){
+				$themod = $pdata['module'];
+				$themode = !isset($pdata['mode']) ? "view" : ($pdata['mode'] == "view" ? "view" : "input");
+
+				$path = __DIR__."/controllers/{$themod}Controller.php";
+
+				if(is_file($path)){
+					include "$path";
+
+					$classname = substr($themod, 0, -1). 'ops';
+					$controller_instance = new $classname();
+					$controller_instance::get_class_fields($themode,$res);
+				} else {
+					$res = mekresponse("invalid Endpoint");
+				}
+			} else {
+				$res = mekresponse("invalid data stream");
+			}
+		},
 		"updatedb" => function($data,&$res){
 			$msg = "working";
 			$con = true;

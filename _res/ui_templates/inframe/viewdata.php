@@ -41,7 +41,11 @@
 	$itwirked = $thedata['success'];
 	$theres = $thedata['result'];
 
-	say(json_encode($thedata),"viewdata");
+	echo 
+
+	say("thedata: <br>".json_encode($thedata)."<hr>","viewdata");
+	say("fields: <br>".json_encode($fields)."<hr>","viewdata");
+	// exit();
 
 	echo <<<HTML
 		<!-- Recent $model Table -->

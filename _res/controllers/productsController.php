@@ -82,5 +82,18 @@
 
 			$res = $myclass->response;
 		}
+
+		public static function get_class_fields($mode,&$res){
+			$myclass = self::getinstance();
+			$fields = [];
+
+			if($mode === 'input'){
+				$fields = $myclass::getinputFields();
+			} else {
+				$fields = $myclass::getviewFields();
+			}
+
+			$res = $fields;
+		}
 	}
 ?>

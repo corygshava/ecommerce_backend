@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Multi-Image Upload – LuxeVault</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"> -->
+    <link rel="stylesheet" href="../_assets/css/fa-all.css">
     <style>
         :root{
             --primary:#1a1a1a;
@@ -108,7 +108,9 @@
     <h2>Upload Product Images</h2>
 
     <!-- hidden master input -->
-    <input type="file" id="masterInput" accept="image/*" multiple style="display:none">
+    <form method="post" enctype="multipart/formData">
+        <input type="file" id="masterInput" accept="image/*" multiple style="display:none">
+    </form>
 
     <button class="add-btn" onclick="openFileDialog()">
         <i class="fas fa-plus"></i> Add Images
