@@ -41,7 +41,7 @@
 	$itwirked = $thedata['success'];
 	$theres = $thedata['result'];
 
-	echo 
+	// echo 
 
 	say("thedata: <br>".json_encode($thedata)."<hr>","viewdata");
 	say("fields: <br>".json_encode($fields)."<hr>","viewdata");

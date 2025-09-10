@@ -141,7 +141,7 @@ function alert_quiet(message,time) {showAlert(message,time,"quiet");}
 function alert_silent(message,time) {showAlert(message,time,"quiet");}
 
 window.addEventListener('keydown',(e) => {
-	if(e.key.toLowerCase() == 'tab'){
+	if(e.key != undefined && e.key.toLowerCase() == 'tab' && e.shiftKey){
 		let mystring = mekRandomString(16);
 		showAlert(`random string : ${mystring}`,7,'warning');
 	}
