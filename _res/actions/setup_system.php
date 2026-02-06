@@ -54,9 +54,8 @@
 	if ($adminCheck["success"] && empty($adminCheck["result"])) {
 		$thedate = date("Y-m-d H:i:s");
 		$insert = Qrun::run(
-			"INSERT INTO admins (username, password, email, last_login, created_by, updated_by
-			) VALUES (?,?,?,?,1,1);
-",
+				"INSERT INTO admins (username, password, email, last_login, created_by, updated_by
+				) VALUES (?,?,?,?,1,1);",
 			['admin', md5('1234'), 'admin@houseofjrm.com', $thedate],
 			[PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_STR]
 		);
