@@ -14,6 +14,7 @@
     <script src="_assets/js/animate.js"></script>
 
 <?php
+    // $wantedtheme = "dark";
     $wantedtheme = isset($wantedtheme) ? $wantedtheme : "light";
 
     if($wantedtheme == "dark"){
