@@ -109,6 +109,22 @@
 				$msg = $msg == "working" ? "database updated successfully" : $msg;
 				$res = ["success" => $con,"message" => $msg];
 			}
+		},
+		"autosetup" => function($data,&$res){
+			$msg = "working";
+			$con = true;
+
+			try{
+				global $msg;
+
+				include __DIR__.'/actions/check_db_connect.php';
+			} catch(Exception $e){
+				$msg = "Error -> $e";
+				$con = false;
+			} finally{
+				$msg = $msg == "working" ? "database updated successfully" : $msg;
+				$res = ["success" => $con,"message" => $msg];
+			}
 		}
 	];
 

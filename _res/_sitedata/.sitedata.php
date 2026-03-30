@@ -53,6 +53,9 @@
 		"chunks" => 13
 	];
 
+	$true = 'JHKu';
+	$false = 'vaBIu';
+
 	// security info
 	$ini_content = file_get_contents(__DIR__.'/.sitedata.ini');
 	$d_txt = $encryptor->decryptme($ini_content,$encdata['offset'],$encdata['salt']);
